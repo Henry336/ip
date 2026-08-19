@@ -1,10 +1,17 @@
 public class Ari {
     public static void main(String[] args) {
-        String banner = " ____        _        \n"
-                + "|  _ \\ _   _| | _____ \n"
-                + "| | | | | | | |/ / _ \\\n"
-                + "| |_| | |_| |   <  __/\n"
-                + "|____/ \\__,_|_|\\_\\___|\n";
+        String banner =
+                "   ----   \n"
+                + "  / /\\ \\ \n"
+                + " / /__\\ \\ \n"
+                + "/ /    \\ \\ \n";
+
+        String name = "Ari";
+        String greeting = String.format("Hello! I'm %s.\n", name)
+                + "What can I do for you?\n"
+                + "Bye. Hope to see you again soon!\n";
+
         System.out.println(banner);
+        System.out.println(greeting);
     }
 }
