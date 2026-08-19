@@ -1,4 +1,10 @@
+import java.util.Scanner;
+
 public class Ari {
+    public static void print(String s) {
+        System.out.println(s);
+    }
+
     public static void main(String[] args) {
         String banner =
                 "   ----   \n"
@@ -7,11 +13,24 @@ public class Ari {
                 + "/ /    \\ \\ \n";
 
         String name = "Ari";
-        String greeting = String.format("Hello! I'm %s.\n", name)
-                + "What can I do for you?\n"
-                + "Bye. Hope to see you again soon!\n";
+        Scanner scanner = new Scanner(System.in);
 
-        System.out.println(banner);
-        System.out.println(greeting);
+        String greeting = String.format("Heyyy, I'm %s!\n", name)
+                + "What can I help you with?\n";
+
+        String farewell = "Bye byeee. Take care!\n";
+
+        print(banner);
+        print(greeting);
+        String userInput = scanner.nextLine();
+        String flatInput = userInput.toLowerCase();
+
+        while (!flatInput.equals("bye")) {
+            print(userInput);
+            userInput = scanner.nextLine();
+            flatInput = userInput.toLowerCase();
+        }
+        print(farewell);
+        scanner.close(); // always clean up
     }
 }
