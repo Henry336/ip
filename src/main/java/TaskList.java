@@ -8,7 +8,13 @@ public class TaskList {
         this.idx = 0;
     }
 
-    public String addTask(String description, String type) {
+    public String addTask(String description, String type) throws EmptyArgumentException {
+        String[] taskArr = description.strip().split("/");
+        String[] cmdArr = taskArr[0].split(" ");
+        if (cmdArr.length < 2) {
+            throw new EmptyArgumentException(cmdArr[0]);
+        }
+
         switch (type) {
             case "T":
                 this.tasks[this.idx] = new TodoTask(description);

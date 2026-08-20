@@ -34,64 +34,68 @@ public class Ari {
                 break;
             }
 
-            switch (command) {
-                case LIST:
-                    print(command.getDescription());
-                    print(tasks.toString());
-                    break;
+            try {
+                switch (command) {
+                    case LIST:
+                        print(command.getDescription());
+                        print(tasks.toString());
+                        break;
 
-                case MARK:
-                case UNMARK:
-                    int idx = getIdx(input);
-                    String changedTask = tasks.changeTaskState(idx);
-                    print(String.format(
-                            "____________________________________________________________\n" +
-                                    "%s\n %s\n" +
-                            "____________________________________________________________\n",
-                            command.getDescription(),
-                            changedTask)
-                    );
-                    break;
+                    case MARK:
+                    case UNMARK:
+                        int idx = getIdx(input);
+                        String changedTask = tasks.changeTaskState(idx);
+                        print(String.format(
+                                "____________________________________________________________\n" +
+                                        "%s\n %s\n" +
+                                        "____________________________________________________________\n",
+                                command.getDescription(),
+                                changedTask)
+                        );
+                        break;
 
-                case TODO:
-                    String addedTaskT = tasks.addTask(input, "T");
-                    print(String.format(
-                            "____________________________________________________________\n" +
-                                    "%s\n %s\n%s\n" +
-                            "____________________________________________________________\n",
-                            command.getDescription(),
-                            addedTaskT.toString(),
-                            tasks.getLengthText()
-                    ));
-                    break;
+                    case TODO:
+                        String addedTaskT = tasks.addTask(input, "T");
+                        print(String.format(
+                                "____________________________________________________________\n" +
+                                        "%s\n %s\n%s\n" +
+                                        "____________________________________________________________\n",
+                                command.getDescription(),
+                                addedTaskT.toString(),
+                                tasks.getLengthText()
+                        ));
+                        break;
 
-                case DEADLINE:
-                    String addedTaskD = tasks.addTask(input, "D");
-                    print(String.format(
-                            "____________________________________________________________\n" +
-                                    "%s\n %s\n%s\n" +
-                            "____________________________________________________________\n",
-                            command.getDescription(),
-                            addedTaskD.toString(),
-                            tasks.getLengthText()
-                    ));
-                    break;
+                    case DEADLINE:
+                        String addedTaskD = tasks.addTask(input, "D");
+                        print(String.format(
+                                "____________________________________________________________\n" +
+                                        "%s\n %s\n%s\n" +
+                                        "____________________________________________________________\n",
+                                command.getDescription(),
+                                addedTaskD.toString(),
+                                tasks.getLengthText()
+                        ));
+                        break;
 
-                case EVENT:
-                    String addedTaskE = tasks.addTask(input, "E");
-                    print(String.format(
-                            "____________________________________________________________\n" +
-                                    "%s\n %s\n%s\n" +
-                            "____________________________________________________________\n",
-                            command.getDescription(),
-                            addedTaskE.toString(),
-                            tasks.getLengthText()
-                    ));
-                    break;
+                    case EVENT:
+                        String addedTaskE = tasks.addTask(input, "E");
+                        print(String.format(
+                                "____________________________________________________________\n" +
+                                        "%s\n %s\n%s\n" +
+                                        "____________________________________________________________\n",
+                                command.getDescription(),
+                                addedTaskE.toString(),
+                                tasks.getLengthText()
+                        ));
+                        break;
 
-                case UNKNOWN:
-                    print("Sorry, I didn't get that... Could you say something else? ^.^\"");
-                    break;
+                    case UNKNOWN:
+                        print("Sorry, I didn't get that... Could you say something else? ^.^\"");
+                        break;
+                }
+            } catch (EmptyArgumentException e) {
+                print(e.getMessage());
             }
         }
 
