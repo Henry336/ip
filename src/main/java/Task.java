@@ -1,10 +1,12 @@
 public class Task {
     private String description;
     private boolean isDone;
+    private String type;
 
     public Task(String description) {
         this.description = description;
         this.isDone = false;
+        this.type = "T";
     }
 
     public void changeState() {
@@ -13,7 +15,7 @@ public class Task {
 
     @Override
     public String toString() {
-        String box = "";
+        String box;
 
         if (this.isDone) {
             box = "[X]";
@@ -21,6 +23,6 @@ public class Task {
             box = "[ ]";
         }
 
-        return box + " " + description;
+        return String.format("[%s]%s %s", this.type, box, this.description);
     }
 }

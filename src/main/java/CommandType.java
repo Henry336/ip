@@ -1,10 +1,12 @@
 public enum CommandType {
     MARK("Good job! I've marked this task as done:\n"),
-    UNMARK("Got it. I've unmarked this task:\n"),
+    UNMARK("Gotcha, I've unmarked this task:\n"),
     EXIT("Bye Bye. See you again!"),
     LIST("Here are the tasks on your list:\n"),
     ADD("Added: "),
-    UNKNOWN("Error");
+    TODO("Got it! I've added this task:\n"),
+    UNKNOWN("Error"),
+    DEADLINE("Got it! I've added this task:\n");
 
     private final String description;
 
