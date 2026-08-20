@@ -22,6 +22,14 @@ public class Task {
         this.isDone = !this.isDone;
     }
 
+    public void markTask() {
+        this.isDone = true;
+    }
+
+    public void unmarkTask() {
+        this.isDone = false;
+    }
+
     @Override
     public String toString() {
         String box;

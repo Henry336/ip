@@ -4,6 +4,15 @@ public class Ari {
     public static String name = "Ari";
     public static int idx = 0;
     public static TaskList tasks = new TaskList(100);
+    public static String listOfCmds = "Here is a list of supported commands:\n\n"
+            + "Keyword | Description \n"
+            + "todo    | Adds a task to your list of tasks! (e.g., todo read book)\n"
+            + "mark    | Marks the task with the task ID as done! (e.g., mark 1)\n"
+            + "unmark  | Does the opposite of mark. (e.g., unmark 1)\n"
+            + "delete  | Removes the specified task from the list (e.g., delete 1)\n"
+            + "list    | Lists all your tasks in the order they were added in! (e.g., list)\n"
+            + "exit    | Ends the program (e.g., exit)\n"
+            + "bye     | Serves the same purpose as 'exit' (e.g., bye)\n";
 
     public static String banner =
             "   ----   \n"
@@ -24,12 +33,13 @@ public class Ari {
         Scanner scanner = new Scanner(System.in);
         print(banner);
         print("Hola, I'm Ari!\n" + "Need any help?\n");
+        print(listOfCmds);
 
         while (true) {
             String input = scanner.nextLine();
             CommandType command = CommandType.of(input);
 
-            if (command.equals(CommandType.EXIT)) {
+            if (command.equals(CommandType.EXIT) || command.equals(CommandType.BYE)) {
                 print(command.getDescription());
                 break;
             }
@@ -44,7 +54,10 @@ public class Ari {
                     case MARK:
                     case UNMARK:
                         int idx = getIdx(input);
-                        String changedTask = tasks.changeTaskState(idx);
+                        String changedTask = (command.equals(CommandType.MARK))
+                                ? tasks.markTask(idx)
+                                : tasks.unmarkTask(idx);
+
                         print(String.format(
                                 "____________________________________________________________\n" +
                                         "%s\n %s\n" +
@@ -73,7 +86,7 @@ public class Ari {
                                         "%s\n %s\n%s\n" +
                                         "____________________________________________________________\n",
                                 command.getDescription(),
-                                addedTaskD.toString(),
+                                addedTaskD,
                                 tasks.getLengthText()
                         ));
                         break;
@@ -85,17 +98,43 @@ public class Ari {
                                         "%s\n %s\n%s\n" +
                                         "____________________________________________________________\n",
                                 command.getDescription(),
-                                addedTaskE.toString(),
+                                addedTaskE,
                                 tasks.getLengthText()
                         ));
                         break;
 
+                    case DELETE:
+                        int taskId = getIdx(input);
+                        String startingText = command.getDescription();
+                        String middleText = tasks.deleteTask(taskId);
+                        String endingText = tasks.getLengthText();
+
+                        if (middleText.equals("None")) {
+                            startingText = "Fortunately, there was nothing to delete.";
+                            middleText = "Because you've completed all your tasks!";
+                            endingText = "Good job! Keep this up!";
+                        }
+
+                        print(String.format(
+                                "____________________________________________________________\n" +
+                                        "%s\n %s\n%s\n" +
+                                        "____________________________________________________________\n",
+                                startingText,
+                                middleText,
+                                endingText
+                        ));
+                        break;
+
                     case UNKNOWN:
-                        print("Sorry, I didn't get that... Could you say something else? ^.^\"");
+                        print("Sorry, I didn't get that... Could you say something else? ^.^");
                         break;
                 }
             } catch (EmptyArgumentException e) {
                 print(e.getMessage());
+            } catch (TaskNotFoundException e) {
+                print(e.getMessage());
+            } catch (NumberFormatException e) {
+                print("Oops! You can only enter integer IDs. Try again!");
             }
         }
 

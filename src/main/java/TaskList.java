@@ -42,22 +42,45 @@ public class TaskList {
         return addedTask.toString();
     }
 
-    public String changeTaskState(int id) {
+    public String markTask(int id) throws TaskNotFoundException {
+        if (id - 1 >= this.idx) {
+            throw new TaskNotFoundException(id);
+        }
+
         Task task = this.tasks[id - 1];
-        task.changeState();
+        task.markTask();
         return task.toString();
     }
 
-    public void printTasks(Task[] list) {
-        int init = 0;
-        String result = "";
-
-        while (init < idx) {
-            result += String.format("%s. %s\n", init + 1, this.tasks[init]);
-            init += 1;
+    public String unmarkTask(int id) throws TaskNotFoundException {
+        if (id - 1 >= this.idx) {
+            throw new TaskNotFoundException(id);
         }
 
-        System.out.println(result);
+        Task task = this.tasks[id - 1];
+        task.unmarkTask();
+        return task.toString();
+    }
+
+    public String deleteTask(int id) throws TaskNotFoundException {
+        if (this.count == 0) {
+            return "None"; // if no tasks remain, then it's fine
+        } else if (id - 1 >= this.idx) {
+            throw new TaskNotFoundException(id); // if there is/are task(s), then we must throw an exception
+        }
+
+        int i = id - 1;
+        Task deletedTask = this.tasks[i];
+
+        while (i < count && this.tasks[i] != null) {
+            this.tasks[i] = this.tasks[i + 1];
+            i += 1;
+        }
+
+        this.count -= 1;
+        this.idx -= 1;
+
+        return deletedTask.toString();
     }
 
     public Task getTask(int idx) {
@@ -73,11 +96,23 @@ public class TaskList {
     }
 
     public String getLengthText() {
-        return String.format("You currently have %s in the list! Better get working...", this.count);
+        String taskNounForm = (this.count == 1)
+                ? "task"
+                : "tasks";
+
+        if (this.count == 0) {
+            return "You currently have no tasks remaining. Good job!";
+        }
+
+        return String.format("You currently have %s %s in the list! Better get working...", this.count, taskNounForm);
     }
 
     @Override
     public String toString() {
+        if (this.count == 0) {
+            return this.getLengthText();
+        }
+
         int i = 0;
         String result = "";
 
