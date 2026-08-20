@@ -1,12 +1,21 @@
 public class Task {
-    private String description;
-    private boolean isDone;
-    private String type;
+    protected String description;
+    protected boolean isDone;
+    protected String type;
 
-    public Task(String description) {
-        this.description = description;
+    public Task(String rawDescription, String type) {
+        String[] descArr = rawDescription.split(" ");
+        String desc = "";
+
+        int idx = 1;
+        while (idx < descArr.length) {
+            desc += descArr[idx] + " ";
+            idx += 1;
+        }
+
+        this.description = desc.strip();
         this.isDone = false;
-        this.type = "T";
+        this.type = type;
     }
 
     public void changeState() {

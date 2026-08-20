@@ -23,7 +23,7 @@ public class Ari {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         print(banner);
-        print("Hey, I'm Ari!\n" + "What can I help you with?\n");
+        print("Hola, I'm Ari!\n" + "Need any help?\n");
 
         while (true) {
             String input = scanner.nextLine();
@@ -44,13 +44,53 @@ public class Ari {
                 case UNMARK:
                     int idx = getIdx(input);
                     String changedTask = tasks.changeTaskState(idx);
-                    print(command.getDescription());
-                    print(changedTask);
+                    print(String.format(
+                            "____________________________________________________________\n" +
+                                    "%s\n %s\n" +
+                            "____________________________________________________________\n",
+                            command.getDescription(),
+                            changedTask)
+                    );
                     break;
 
-                case ADD:
-                    String addedTask = tasks.addTask(input);
-                    print(command.getDescription() + addedTask);
+                case TODO:
+                    String addedTaskT = tasks.addTask(input, "T");
+                    print(String.format(
+                            "____________________________________________________________\n" +
+                                    "%s\n %s\n%s\n" +
+                            "____________________________________________________________\n",
+                            command.getDescription(),
+                            addedTaskT.toString(),
+                            tasks.getLengthText()
+                    ));
+                    break;
+
+                case DEADLINE:
+                    String addedTaskD = tasks.addTask(input, "D");
+                    print(String.format(
+                            "____________________________________________________________\n" +
+                                    "%s\n %s\n%s\n" +
+                            "____________________________________________________________\n",
+                            command.getDescription(),
+                            addedTaskD.toString(),
+                            tasks.getLengthText()
+                    ));
+                    break;
+
+                case EVENT:
+                    String addedTaskE = tasks.addTask(input, "E");
+                    print(String.format(
+                            "____________________________________________________________\n" +
+                                    "%s\n %s\n%s\n" +
+                            "____________________________________________________________\n",
+                            command.getDescription(),
+                            addedTaskE.toString(),
+                            tasks.getLengthText()
+                    ));
+                    break;
+
+                case UNKNOWN:
+                    print("Sorry, I didn't get that... Could you say something else? ^.^\"");
                     break;
             }
         }

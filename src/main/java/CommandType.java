@@ -1,12 +1,13 @@
 public enum CommandType {
-    MARK("Good job! I've marked this task as done:\n"),
-    UNMARK("Gotcha, I've unmarked this task:\n"),
+    MARK("Good job! I've marked this task as done:"),
+    UNMARK("Gotcha, I've unmarked this task:"),
     EXIT("Bye Bye. See you again!"),
-    LIST("Here are the tasks on your list:\n"),
+    LIST("Here are the tasks on your list:"),
     ADD("Added: "),
-    TODO("Got it! I've added this task:\n"),
+    TODO("Gotcha. I've added this task for you:"),
     UNKNOWN("Error"),
-    DEADLINE("Got it! I've added this task:\n");
+    DEADLINE("Gotcha. I've added this task for you:"),
+    EVENT("Gotcha. I've added this task for you:");
 
     private final String description;
 
@@ -43,7 +44,7 @@ public enum CommandType {
         try {
             return CommandType.valueOf(cmd.toUpperCase());
         } catch (IllegalArgumentException e) {
-            return ADD; // like 'read book', 'do homework', 'study', etc.
+            return UNKNOWN; // like 'read book', 'do homework', 'study', etc.
         }
     }
 }
