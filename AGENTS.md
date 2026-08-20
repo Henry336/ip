@@ -28,6 +28,15 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.
 
+## Verification after code changes
+
+After every completed update to application or test code, before reporting the work as complete:
+
+1. Review `test/ui-test-plan.md` against the changed behavior. Update the plan when commands, expected output, setup, or relevant UI-test coverage have changed. If no update is needed, leave the file unchanged and state that it was reviewed.
+2. Invoke the project-specific `$test-ui` skill and follow its stop-on-first-failure workflow. This invocation is mandatory even when `test/ui-test-plan.md` did not need an update.
+
+Do not claim that a code update is verified when the UI tests could not run. Report an empty test plan, unavailable JDK 25 runtime, compilation error, or other blocker explicitly.
+
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.
