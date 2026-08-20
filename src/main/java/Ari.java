@@ -1,63 +1,60 @@
 import java.util.Scanner;
 
 public class Ari {
+    public static String name = "Ari";
     public static int idx = 0;
-    public static String[] list = new String[100];
-    public static String GOODBYE = "bye";
-    public static String LIST = "list";
+    public static TaskList tasks = new TaskList(100);
+
+    public static String banner =
+            "   ----   \n"
+                    + "  / /\\ \\ \n"
+                    + " / /__\\ \\ \n"
+                    + "/ /    \\ \\ \n";
 
     public static void print(String s) {
         System.out.println(s);
     }
 
-    public static void printList(String[] list) {
-        int init = 0;
-        String result = "";
-
-        while (init < idx) {
-            int num = init + 1;
-            result += String.format("%s. %s\n", num, list[init]);
-            init += 1;
-        }
-
-        print(result);
+    public static int getIdx(String s) {
+        String result = s.strip().split("\\s+")[1];
+        return Integer.parseInt(result);
     }
 
     public static void main(String[] args) {
-
-        String banner =
-                "   ----   \n"
-                + "  / /\\ \\ \n"
-                + " / /__\\ \\ \n"
-                + "/ /    \\ \\ \n";
-
-        String name = "Ari";
         Scanner scanner = new Scanner(System.in);
-
-        String greeting = String.format("Heyyy, I'm %s!\n", name)
-                + "What can I help you with?\n";
-
-        String farewell = "Bye byeee. Take care!\n";
-
         print(banner);
-        print(greeting);
-        String userInput = scanner.nextLine();
-        String flatInput = userInput.toLowerCase();
+        print("Hey, I'm Ari!\n" + "What can I help you with?\n");
 
-        while (!flatInput.equals(GOODBYE)) {
-            if (!flatInput.equals(LIST)) {
-                list[idx] = userInput;
-                String addedText = String.format("added: %s", userInput);
-                print(addedText);
-                idx += 1;
-            } else {
-                printList(list);
+        while (true) {
+            String input = scanner.nextLine();
+            CommandType command = CommandType.of(input);
+
+            if (command.equals(CommandType.EXIT)) {
+                print(command.getDescription());
+                break;
             }
-            userInput = scanner.nextLine();
-            flatInput = userInput.toLowerCase();
+
+            switch (command) {
+                case LIST:
+                    print(command.getDescription());
+                    print(tasks.toString());
+                    break;
+
+                case MARK:
+                case UNMARK:
+                    int idx = getIdx(input);
+                    String changedTask = tasks.changeTaskState(idx);
+                    print(command.getDescription());
+                    print(changedTask);
+                    break;
+
+                case ADD:
+                    String addedTask = tasks.addTask(input);
+                    print(command.getDescription() + addedTask);
+                    break;
+            }
         }
 
-        print(farewell);
         scanner.close(); // always clean up
     }
 }
