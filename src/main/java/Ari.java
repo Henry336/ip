@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Ari {
     public static String name = "Ari";
     public static int idx = 0;
-    public static TaskList tasks = new TaskList(100);
+    public static TaskArray tasks = new TaskArray();
     public static String listOfCmds = "Here is a list of supported commands:\n\n"
             + "Keyword | Description \n"
             + "todo    | Adds a task to your list of tasks! (e.g., todo read book)\n"
