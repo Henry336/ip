@@ -54,16 +54,17 @@ Need any help?
 
 Here is a list of supported commands:
 
-Keyword | Description 
-todo    | Adds a task to your list of tasks! (e.g., todo read book)
-deadline| Adds a task with a deadline. (e.g., deadline do something /by Sunday
-event   | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm
-mark    | Marks the task with the task ID as done! (e.g., mark 1)
-unmark  | Does the opposite of mark. (e.g., unmark 1)
-delete  | Removes the specified task from the list (e.g., delete 1)
-list    | Lists all your tasks in the order they were added in! (e.g., list)
-exit    | Ends the program (e.g., exit)
-bye     | Serves the same purpose as 'exit' (e.g., bye)
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
 Sorry, I didn't get that... Could you say something else? ^.^
 Here are the tasks on your list:
@@ -102,16 +103,17 @@ Need any help?
 
 Here is a list of supported commands:
 
-Keyword | Description 
-todo    | Adds a task to your list of tasks! (e.g., todo read book)
-deadline| Adds a task with a deadline. (e.g., deadline do something /by Sunday
-event   | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm
-mark    | Marks the task with the task ID as done! (e.g., mark 1)
-unmark  | Does the opposite of mark. (e.g., unmark 1)
-delete  | Removes the specified task from the list (e.g., delete 1)
-list    | Lists all your tasks in the order they were added in! (e.g., list)
-exit    | Ends the program (e.g., exit)
-bye     | Serves the same purpose as 'exit' (e.g., bye)
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
 ____________________________________________________________
 Gotcha. I've added this task for you:
@@ -156,16 +158,17 @@ Need any help?
 
 Here is a list of supported commands:
 
-Keyword | Description 
-todo    | Adds a task to your list of tasks! (e.g., todo read book)
-deadline| Adds a task with a deadline. (e.g., deadline do something /by Sunday
-event   | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm
-mark    | Marks the task with the task ID as done! (e.g., mark 1)
-unmark  | Does the opposite of mark. (e.g., unmark 1)
-delete  | Removes the specified task from the list (e.g., delete 1)
-list    | Lists all your tasks in the order they were added in! (e.g., list)
-exit    | Ends the program (e.g., exit)
-bye     | Serves the same purpose as 'exit' (e.g., bye)
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
 ____________________________________________________________
 Gotcha. I've added this task for you:
@@ -212,16 +215,17 @@ Need any help?
 
 Here is a list of supported commands:
 
-Keyword | Description 
-todo    | Adds a task to your list of tasks! (e.g., todo read book)
-deadline| Adds a task with a deadline. (e.g., deadline do something /by Sunday
-event   | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm
-mark    | Marks the task with the task ID as done! (e.g., mark 1)
-unmark  | Does the opposite of mark. (e.g., unmark 1)
-delete  | Removes the specified task from the list (e.g., delete 1)
-list    | Lists all your tasks in the order they were added in! (e.g., list)
-exit    | Ends the program (e.g., exit)
-bye     | Serves the same purpose as 'exit' (e.g., bye)
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
 ____________________________________________________________
 Gotcha. I've added this task for you:
@@ -277,16 +281,17 @@ Need any help?
 
 Here is a list of supported commands:
 
-Keyword | Description 
-todo    | Adds a task to your list of tasks! (e.g., todo read book)
-deadline| Adds a task with a deadline. (e.g., deadline do something /by Sunday
-event   | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm
-mark    | Marks the task with the task ID as done! (e.g., mark 1)
-unmark  | Does the opposite of mark. (e.g., unmark 1)
-delete  | Removes the specified task from the list (e.g., delete 1)
-list    | Lists all your tasks in the order they were added in! (e.g., list)
-exit    | Ends the program (e.g., exit)
-bye     | Serves the same purpose as 'exit' (e.g., bye)
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
 ____________________________________________________________
 Gotcha. I've added this task for you:
@@ -337,16 +342,17 @@ Need any help?
 
 Here is a list of supported commands:
 
-Keyword | Description 
-todo    | Adds a task to your list of tasks! (e.g., todo read book)
-deadline| Adds a task with a deadline. (e.g., deadline do something /by Sunday
-event   | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm
-mark    | Marks the task with the task ID as done! (e.g., mark 1)
-unmark  | Does the opposite of mark. (e.g., unmark 1)
-delete  | Removes the specified task from the list (e.g., delete 1)
-list    | Lists all your tasks in the order they were added in! (e.g., list)
-exit    | Ends the program (e.g., exit)
-bye     | Serves the same purpose as 'exit' (e.g., bye)
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
 Task 0 does not exist!
 Send 'list' to see which tasks you have left!
@@ -385,16 +391,17 @@ Need any help?
 
 Here is a list of supported commands:
 
-Keyword | Description 
-todo    | Adds a task to your list of tasks! (e.g., todo read book)
-deadline| Adds a task with a deadline. (e.g., deadline do something /by Sunday
-event   | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm
-mark    | Marks the task with the task ID as done! (e.g., mark 1)
-unmark  | Does the opposite of mark. (e.g., unmark 1)
-delete  | Removes the specified task from the list (e.g., delete 1)
-list    | Lists all your tasks in the order they were added in! (e.g., list)
-exit    | Ends the program (e.g., exit)
-bye     | Serves the same purpose as 'exit' (e.g., bye)
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
 ____________________________________________________________
 Gotcha. I've added this task for you:
@@ -451,16 +458,17 @@ Need any help?
 
 Here is a list of supported commands:
 
-Keyword | Description 
-todo    | Adds a task to your list of tasks! (e.g., todo read book)
-deadline| Adds a task with a deadline. (e.g., deadline do something /by Sunday
-event   | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm
-mark    | Marks the task with the task ID as done! (e.g., mark 1)
-unmark  | Does the opposite of mark. (e.g., unmark 1)
-delete  | Removes the specified task from the list (e.g., delete 1)
-list    | Lists all your tasks in the order they were added in! (e.g., list)
-exit    | Ends the program (e.g., exit)
-bye     | Serves the same purpose as 'exit' (e.g., bye)
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
 Oh no! You can't have an empty description for todos
 Oh no! You can't have an empty description for deadlines
@@ -505,16 +513,17 @@ Need any help?
 
 Here is a list of supported commands:
 
-Keyword | Description 
-todo    | Adds a task to your list of tasks! (e.g., todo read book)
-deadline| Adds a task with a deadline. (e.g., deadline do something /by Sunday
-event   | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm
-mark    | Marks the task with the task ID as done! (e.g., mark 1)
-unmark  | Does the opposite of mark. (e.g., unmark 1)
-delete  | Removes the specified task from the list (e.g., delete 1)
-list    | Lists all your tasks in the order they were added in! (e.g., list)
-exit    | Ends the program (e.g., exit)
-bye     | Serves the same purpose as 'exit' (e.g., bye)
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
 ____________________________________________________________
 Gotcha. I've added this task for you:
@@ -564,16 +573,17 @@ Need any help?
 
 Here is a list of supported commands:
 
-Keyword | Description 
-todo    | Adds a task to your list of tasks! (e.g., todo read book)
-deadline| Adds a task with a deadline. (e.g., deadline do something /by Sunday
-event   | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm
-mark    | Marks the task with the task ID as done! (e.g., mark 1)
-unmark  | Does the opposite of mark. (e.g., unmark 1)
-delete  | Removes the specified task from the list (e.g., delete 1)
-list    | Lists all your tasks in the order they were added in! (e.g., list)
-exit    | Ends the program (e.g., exit)
-bye     | Serves the same purpose as 'exit' (e.g., bye)
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
 ____________________________________________________________
 Fortunately, there was nothing to delete.
@@ -618,16 +628,17 @@ Need any help?
 
 Here is a list of supported commands:
 
-Keyword | Description 
-todo    | Adds a task to your list of tasks! (e.g., todo read book)
-deadline| Adds a task with a deadline. (e.g., deadline do something /by Sunday
-event   | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm
-mark    | Marks the task with the task ID as done! (e.g., mark 1)
-unmark  | Does the opposite of mark. (e.g., unmark 1)
-delete  | Removes the specified task from the list (e.g., delete 1)
-list    | Lists all your tasks in the order they were added in! (e.g., list)
-exit    | Ends the program (e.g., exit)
-bye     | Serves the same purpose as 'exit' (e.g., bye)
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
 ____________________________________________________________
 Gotcha. I've added this task for you:
@@ -689,16 +700,17 @@ Need any help?
 
 Here is a list of supported commands:
 
-Keyword | Description 
-todo    | Adds a task to your list of tasks! (e.g., todo read book)
-deadline| Adds a task with a deadline. (e.g., deadline do something /by Sunday
-event   | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm
-mark    | Marks the task with the task ID as done! (e.g., mark 1)
-unmark  | Does the opposite of mark. (e.g., unmark 1)
-delete  | Removes the specified task from the list (e.g., delete 1)
-list    | Lists all your tasks in the order they were added in! (e.g., list)
-exit    | Ends the program (e.g., exit)
-bye     | Serves the same purpose as 'exit' (e.g., bye)
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
 ____________________________________________________________
 Gotcha. I've added this task for you:
