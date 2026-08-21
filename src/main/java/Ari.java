@@ -7,6 +7,8 @@ public class Ari {
     public static String listOfCmds = "Here is a list of supported commands:\n\n"
             + "Keyword | Description \n"
             + "todo    | Adds a task to your list of tasks! (e.g., todo read book)\n"
+            + "deadline| Adds a task with a deadline. (e.g., deadline do something /by Sunday\n"
+            + "event   | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm\n"
             + "mark    | Marks the task with the task ID as done! (e.g., mark 1)\n"
             + "unmark  | Does the opposite of mark. (e.g., unmark 1)\n"
             + "delete  | Removes the specified task from the list (e.g., delete 1)\n"

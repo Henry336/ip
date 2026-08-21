@@ -21,17 +21,19 @@ public class TaskArray {
             case "T":
                 break;
             case "D":
-                String[] taskArr1 = description.strip().split("/"); // [deadline return book, by Sunday)
-                String taskName1 = taskArr1[0];
-                String rawDeadline = taskArr1[1];
+                String[] taskArr1 = description.strip().split("/by"); // [deadline return book, by Sunday)
+                String taskName1 = taskArr1[0].strip();
+                String deadline = taskArr1[1].strip();
 
-                taskToAdd = new DeadlineTask(taskName1, rawDeadline);
+                taskToAdd = new DeadlineTask(taskName1, deadline);
                 break;
             case "E":
-                String[] taskArr2 = description.strip().split("/");
-                String taskName2 = taskArr2[0];
-                String from = taskArr2[1];
-                String to = taskArr2[2];
+                String[] taskArr2 = description.strip().split("/from");
+                String taskName2 = taskArr2[0].strip();
+
+                String[] fromToArr = taskArr2[1].split("/to");
+                String from = fromToArr[0].strip();
+                String to = fromToArr[1].strip();
 
                 taskToAdd = new EventTask(taskName2, from, to);
                 break;
@@ -42,7 +44,7 @@ public class TaskArray {
     }
 
     public String markTask(int id) throws TaskNotFoundException {
-        if (id - 1 >= this.tasks.size()) {
+        if (id <= 0 || id - 1 >= this.tasks.size()) {
             throw new TaskNotFoundException(id);
         }
 
@@ -52,7 +54,7 @@ public class TaskArray {
     }
 
     public String unmarkTask(int id) throws TaskNotFoundException {
-        if (id - 1 >= this.tasks.size()) {
+        if (id <= 0 || id - 1 >= this.tasks.size()) {
             throw new TaskNotFoundException(id);
         }
 
@@ -64,7 +66,7 @@ public class TaskArray {
     public String deleteTask(int id) throws TaskNotFoundException {
         if (this.tasks.isEmpty()) {
             return "None"; // if no tasks remain, then it's fine
-        } else if (id - 1 >= this.tasks.size()) {
+        } else if (id <= 0 || id - 1 >= this.tasks.size()) {
             throw new TaskNotFoundException(id); // if there is/are task(s), then we must throw an exception
         }
 

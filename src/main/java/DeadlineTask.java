@@ -1,9 +1,9 @@
 public class DeadlineTask extends Task {
-    private String deadline;
+    private String deadline = "";
 
-    public DeadlineTask(String description, String rawDeadline) {
+    public DeadlineTask(String description, String deadline) {
         super(description, "D");
-        this.deadline = rawDeadline.split(" ")[1];
+        this.deadline = deadline;
     }
 
     public String getDeadline() {
