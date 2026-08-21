@@ -1,6 +1,6 @@
 ---
 name: test-ui
-description: Run planned console UI test cases from test/ui-test-plan.md, compare actual output with expected output, stop at the first failure, and report the complete console transcript. Use when the user asks to test the application's text UI or supplies console commands and expected outputs.
+description: Run all planned console UI test cases from test/ui-test-plan.md, compare actual and expected output, persist failures, and report complete console transcripts. Use after project code changes or when the user asks to test the text UI.
 ---
 
 # Test the Console UI
@@ -23,12 +23,9 @@ Also keep the working directory, compile command, run command, Java version, ses
 
 1. Work from the repository root containing `test/ui-test-plan.md`.
 2. Read the whole plan and select the cases requested by the user. If no subset is requested, run all recorded cases in document order.
-3. Confirm that the Java runtime used by the compile and run commands is JDK 25. Stop before testing and report the problem if it is not.
-4. Compile once using the command in the plan. If compilation fails, stop and show the compiler command and output.
-5. Start a fresh program process for each test case. Feed that case's input commands in their recorded order, including the command that exits the program when applicable.
-6. Capture standard output and standard error without hiding, reordering, or trimming content. Treat a nonzero exit code or unexpected standard-error output as a failure unless the test explicitly expects it.
-7. Normalize only line endings (`CRLF` and `LF`) before comparing. Otherwise compare the full actual output exactly, including blank lines, spaces, punctuation, prompts, startup text, and shutdown text.
-8. After a passing case, continue to the next case. At the first failing case, terminate its process if it is still running and do not run any remaining cases.
+3. Run the inspectable repository script with `python test/run_ui_tests.py`. Pass `--jdk <JDK-home>` only when automatic JDK 25 discovery fails.
+4. The script must compile once, start a fresh process per case, capture standard output and error, normalize only line endings, compare all other content exactly, continue after case failures, and replace `test/ui-test-results.md`.
+5. If the script itself cannot run, follow the same procedure manually and record the blocker or results. Do not silently replace the documented runner with an unrecorded temporary script.
 
 Do not modify application code merely to make a test pass unless the user separately asks for a fix.
 
@@ -36,4 +33,6 @@ Do not modify application code merely to make a test pass unless the user separa
 
 Always show the test cases in execution order and a console transcript for every case that ran. Clearly distinguish entered input from program output while preserving the actual text, for example by prefixing input lines with `> ` and placing the transcript in a fenced text block.
 
-For each passing case, report `PASS`. If a case fails, report `FAIL`, identify the first mismatch when practical, and show both the complete expected output and complete actual output in separate fenced text blocks. State that the remaining cases were not run because testing stops on the first failure.
+For each passing case, report `PASS`. For every failing case, report `FAIL`, identify the first mismatch when practical, and show both the complete expected output and complete actual output in separate fenced text blocks.
+
+After the run, replace `test/ui-test-results.md` with a durable latest-run report containing the run date and time, Java version, compile result, totals, execution order, and status of every case. Include inputs, actual output, expected output, standard error, and exit code for each failure. Record passing cases concisely. Never remove a recorded failure merely because another case also failed.

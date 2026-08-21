@@ -33,9 +33,10 @@ Ensure that Java 25 is used when running the application or build tasks. On macO
 After every completed update to application or test code, before reporting the work as complete:
 
 1. Review `test/ui-test-plan.md` against the changed behavior. Update the plan when commands, expected output, setup, or relevant UI-test coverage have changed. If no update is needed, leave the file unchanged and state that it was reviewed.
-2. Invoke the project-specific `$test-ui` skill and follow its stop-on-first-failure workflow. This invocation is mandatory even when `test/ui-test-plan.md` did not need an update.
+2. Invoke the project-specific `$test-ui` skill and run every applicable recorded test case. This invocation is mandatory even when `test/ui-test-plan.md` did not need an update.
+3. Continue with the remaining independent test cases after a failure. Record the complete latest run, including every failure's actual and expected output, in `test/ui-test-results.md` so the problems remain visible in future sessions.
 
-Do not claim that a code update is verified when the UI tests could not run. Report an empty test plan, unavailable JDK 25 runtime, compilation error, or other blocker explicitly.
+Do not claim that a code update is verified when any test failed or the UI tests could not run. Report failures, an empty test plan, unavailable JDK 25 runtime, compilation errors, and other blockers explicitly.
 
 ## Git
 
