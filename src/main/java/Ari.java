@@ -1,75 +1,57 @@
-import java.util.Scanner;
+import java.io.IOException;
 
+/**
+ * Runs the Ari task manager.
+ */
 public class Ari {
-    public static String name = "Ari";
-    public static int idx = 0;
-    public static TaskArray taskArr = new TaskArray();
-    public static String listOfCmds = "Here is a list of supported commands:\n\n"
-            + "Keyword  |                 Format                | Description \n\n"
-            + "todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)\n"
-            + "deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)\n"
-            + "event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)\n"
-            + "mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)\n"
-            + "unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)\n"
-            + "delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)\n"
-            + "list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)\n"
-            + "exit     | exit                                  | Ends the program (e.g., exit)\n"
-            + "bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)\n";
+    private final Storage storage;
+    private final TaskList tasks;
+    private final Ui ui;
 
-    public static String banner =
-            "   ----   \n"
-                    + "  / /\\ \\ \n"
-                    + " / /__\\ \\ \n"
-                    + "/ /    \\ \\ \n";
-
-    public static void print(String s) {
-        System.out.println(s);
+    /**
+     * Creates Ari with the components needed to run the task manager.
+     *
+     * @param filePath Path of the task data file.
+     */
+    public Ari(String filePath) {
+        this.storage = new Storage(filePath);
+        this.tasks = new TaskList();
+        this.ui = new Ui();
     }
 
-    public static void main(String[] args) {
-        // Initialize the scanner
-        Scanner scanner = new Scanner(System.in);
+    /**
+     * Starts Ari and processes commands until the user exits.
+     */
+    public void run() {
+        this.ui.showWelcome();
+        loadTasks();
 
-        // Greet the user
-        print(banner);
-        print("Hola, I'm Ari!\n" + "Need any help?\n");
-        print(listOfCmds);
-
-        // Initialize the storage
-        // Load any data from pre-existing file
-        Storage.start();
-        Storage.loadInto(taskArr);
-
-        // Input loop
         while (true) {
-            String input = scanner.nextLine();
+            String input = this.ui.readCommand();
             CommandType command = Parser.parseCommandType(input);
 
-            // Save the modified data to the specified path and exit the program
             if (command.equals(CommandType.EXIT) || command.equals(CommandType.BYE)) {
-                Storage.saveFrom(taskArr);
-                print(command.getDescription());
+                saveTasks();
+                this.ui.showMessage(command.getDescription());
                 break;
             }
 
             try {
                 switch (command) {
                     case LIST:
-                        print(command.getDescription());
-                        print(taskArr.toString());
+                        this.ui.showMessage(command.getDescription());
+                        this.ui.showMessage(this.tasks.toString());
                         break;
 
                     case MARK:
                     case UNMARK:
-                        int idx = Parser.parseTaskId(input);
+                        int index = Parser.parseTaskId(input);
                         String changedTask = (command.equals(CommandType.MARK))
-                                ? taskArr.markTask(idx)
-                                : taskArr.unmarkTask(idx);
+                                ? this.tasks.markTask(index)
+                                : this.tasks.unmarkTask(index);
 
-                        print(String.format(
-                                "____________________________________________________________\n" +
-                                        "%s\n %s\n" +
-                                        "____________________________________________________________\n",
+                        this.ui.showMessageWithLines(String.format(
+                                "%s\n %s",
                                 command.getDescription(),
                                 changedTask)
                         );
@@ -79,22 +61,20 @@ public class Ari {
                     case DEADLINE:
                     case EVENT:
                         Task addedTask = Parser.parseTask(input, command);
-                        taskArr.addTask(addedTask);
-                        print(String.format(
-                                "____________________________________________________________\n" +
-                                        "%s\n %s\n%s\n" +
-                                        "____________________________________________________________\n",
+                        this.tasks.addTask(addedTask);
+                        this.ui.showMessageWithLines(String.format(
+                                "%s\n %s\n%s",
                                 command.getDescription(),
                                 addedTask,
-                                taskArr.getLengthText()
+                                this.tasks.getLengthText()
                         ));
                         break;
 
                     case DELETE:
                         int taskId = Parser.parseTaskId(input);
                         String startingText = command.getDescription();
-                        String middleText = taskArr.deleteTask(taskId);
-                        String endingText = taskArr.getLengthText();
+                        String middleText = this.tasks.deleteTask(taskId);
+                        String endingText = this.tasks.getLengthText();
 
                         if (middleText.equals("None")) {
                             startingText = "Fortunately, there was nothing to delete.";
@@ -102,10 +82,8 @@ public class Ari {
                             endingText = "Good job! Keep this up!";
                         }
 
-                        print(String.format(
-                                "____________________________________________________________\n" +
-                                        "%s\n %s\n%s\n" +
-                                        "____________________________________________________________\n",
+                        this.ui.showMessageWithLines(String.format(
+                                "%s\n %s\n%s",
                                 startingText,
                                 middleText,
                                 endingText
@@ -113,18 +91,57 @@ public class Ari {
                         break;
 
                     case UNKNOWN:
-                        print("Sorry, I didn't get that... Could you say something else? ^.^");
+                        this.ui.showMessage(
+                                "Sorry, I didn't get that... Could you say something else? ^.^"
+                        );
                         break;
                 }
             } catch (EmptyArgumentException e) {
-                print(e.getMessage());
+                this.ui.showMessage(e.getMessage());
             } catch (TaskNotFoundException e) {
-                print(e.getMessage());
+                this.ui.showMessage(e.getMessage());
             } catch (NumberFormatException e) {
-                print("Oops! You can only enter integer IDs. Try again!");
+                this.ui.showMessage("Oops! You can only enter integer IDs. Try again!");
             }
         }
 
-        scanner.close(); // always clean up
+        this.ui.close();
+    }
+
+    private void loadTasks() {
+        try {
+            this.storage.start();
+        } catch (IOException e) {
+            this.ui.showStorageInitializationError(e.getMessage());
+        }
+
+        try {
+            boolean isDataFilePresent = this.storage.loadInto(this.tasks);
+            if (isDataFilePresent) {
+                this.ui.showTasksLoaded();
+            } else {
+                this.ui.showNoSavedTasks();
+            }
+        } catch (IOException | IllegalArgumentException e) {
+            this.ui.showLoadingError(e.getMessage());
+        }
+    }
+
+    private void saveTasks() {
+        try {
+            this.storage.saveFrom(this.tasks);
+            this.ui.showTasksSaved();
+        } catch (IOException e) {
+            this.ui.showSavingError(e.getMessage());
+        }
+    }
+
+    /**
+     * Creates and runs Ari using the default task data file.
+     *
+     * @param args Command-line arguments, which are not used.
+     */
+    public static void main(String[] args) {
+        new Ari("data/ari.txt").run();
     }
 }

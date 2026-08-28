@@ -4,10 +4,10 @@ import java.util.List;
 /**
  * Stores and manages the user's tasks.
  */
-public class TaskArray {
+public class TaskList {
     private final ArrayList<Task> tasks;
 
-    public TaskArray() {
+    public TaskList() {
         tasks = new ArrayList<>();
     }
 
