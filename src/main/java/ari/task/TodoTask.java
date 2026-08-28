@@ -1,3 +1,5 @@
+package ari.task;
+
 /**
  * Represents a task without a deadline or scheduled time.
  */

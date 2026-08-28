@@ -5,8 +5,8 @@
 - Working directory: a fresh temporary directory for each test case
 - Required Java version: JDK 25
 - Test command: `python test/run_ui_tests.py`
-- Compile command: `javac -d out src/main/java/*.java`
-- Run command: `java -cp out Ari`
+- Compile command: `javac -d out <all Java files under src/main/java recursively>`
+- Run command: `java -cp out ari.Ari`
 - Session isolation: start a fresh process with an independent `data/ari.txt`
 - Comparison: normalize CRLF/LF line endings, then compare complete output and any expected data file exactly
 - Failure policy: record each failure and continue running all remaining independent cases

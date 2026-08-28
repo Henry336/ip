@@ -1,3 +1,5 @@
+package ari.ui;
+
 import java.util.Scanner;
 
 /**

@@ -1,3 +1,7 @@
+package ari.task;
+
+import ari.Parser;
+
 /**
  * Represents a task that must be completed by a deadline.
  */

@@ -1,3 +1,5 @@
+package ari.task;
+
 /**
  * Defines state and behavior shared by all task types.
  */
