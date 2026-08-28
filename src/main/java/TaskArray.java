@@ -21,6 +21,7 @@ public class TaskArray {
             case "T":
                 break;
             case "D":
+                // rmb to move the following logic inside DeadlineTask class so that the abstraction layer is preserved
                 String[] taskArr1 = description.strip().split("/by"); // [deadline return book, by Sunday)
                 String taskName1 = taskArr1[0].strip();
                 String deadline = taskArr1[1].strip();
@@ -28,6 +29,7 @@ public class TaskArray {
                 taskToAdd = new DeadlineTask(taskName1, deadline);
                 break;
             case "E":
+                // same as the comment above for DeadlineTask
                 String[] taskArr2 = description.strip().split("/from");
                 String taskName2 = taskArr2[0].strip();
 
@@ -74,6 +76,10 @@ public class TaskArray {
         this.tasks.remove(id - 1);
 
         return deletedTask.toString();
+    }
+
+    public ArrayList<Task> getAllTasks() {
+        return this.tasks;
     }
 
     public Task getTask(int id) { return this.tasks.get(id); }

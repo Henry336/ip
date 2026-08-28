@@ -30,6 +30,19 @@ public class Task {
         this.isDone = false;
     }
 
+    public String toDataString() {
+        String status = this.isDone
+                ? "1"
+                : "0";
+
+        return String.format(
+                "%s | %s | %s",
+                this.type,
+                status,
+                this.description
+        );
+    }
+
     @Override
     public String toString() {
         String box;

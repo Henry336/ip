@@ -13,6 +13,22 @@ public class EventTask extends Task {
     }
 
     @Override
+    public String toDataString() {
+        String status = isDone
+                ? "1"
+                : "0";
+
+        return String.format(
+                "%s | %s | %s (from: %s | to: %s)",
+                this.type,
+                status,
+                this.description,
+                this.from,
+                this.to
+        );
+    }
+
+    @Override
     public String toString() {
         String box;
 

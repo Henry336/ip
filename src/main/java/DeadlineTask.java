@@ -11,6 +11,21 @@ public class DeadlineTask extends Task {
     }
 
     @Override
+    public String toDataString() {
+        String status = this.isDone
+                ? "1"
+                : "0";
+
+        return String.format(
+                "%s | %s | %s (deadline: %s)",
+                this.type,
+                status,
+                this.description,
+                this.deadline
+        );
+    }
+
+    @Override
     public String toString() {
         String box;
 

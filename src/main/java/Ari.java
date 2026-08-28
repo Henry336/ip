@@ -42,6 +42,7 @@ public class Ari {
             CommandType command = CommandType.of(input);
 
             if (command.equals(CommandType.EXIT) || command.equals(CommandType.BYE)) {
+                Storage.save(tasks);
                 print(command.getDescription());
                 break;
             }
