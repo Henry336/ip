@@ -81,6 +81,54 @@ public class Ui {
     }
 
     /**
+     * Displays an error encountered while initializing storage.
+     *
+     * @param errorMessage Description of the error.
+     */
+    public void showStorageInitializationError(String errorMessage) {
+        showMessage("Sorry, I couldn't initialize the storage file: " + errorMessage);
+    }
+
+    /**
+     * Displays a message explaining that there are no saved tasks.
+     */
+    public void showNoSavedTasks() {
+        showMessage("There are no saved tasks yet!");
+    }
+
+    /**
+     * Displays a message confirming that saved tasks were loaded.
+     */
+    public void showTasksLoaded() {
+        showMessage("All tasks were loaded!");
+    }
+
+    /**
+     * Displays an error encountered while loading tasks.
+     *
+     * @param errorMessage Description of the error.
+     */
+    public void showLoadingError(String errorMessage) {
+        showMessage("Sorry, I couldn't load your tasks: " + errorMessage);
+    }
+
+    /**
+     * Displays a message confirming that tasks were saved.
+     */
+    public void showTasksSaved() {
+        showMessage("I've saved your tasks.");
+    }
+
+    /**
+     * Displays an error encountered while saving tasks.
+     *
+     * @param errorMessage Description of the error.
+     */
+    public void showSavingError(String errorMessage) {
+        showMessage("Sorry, I couldn't save your tasks: " + errorMessage);
+    }
+
+    /**
      * Closes the input scanner.
      */
     public void close() {

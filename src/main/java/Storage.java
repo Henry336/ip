@@ -22,19 +22,14 @@ public class Storage {
 
     /**
      * Creates the data directory and file when they do not already exist.
+     *
+     * @throws IOException If the directory or file cannot be created.
      */
-    public void start() {
-        try {
-            Files.createDirectories(this.filePath.getParent());
+    public void start() throws IOException {
+        Files.createDirectories(this.filePath.getParent());
 
-            if (Files.notExists(this.filePath)) {
-                Files.createFile(this.filePath);
-            }
-        } catch (IOException e) {
-            System.out.println(
-                    "Sorry, I couldn't initialize the storage file: "
-                    + e.getMessage()
-            );
+        if (Files.notExists(this.filePath)) {
+            Files.createFile(this.filePath);
         }
     }
 
@@ -42,51 +37,42 @@ public class Storage {
      * Loads all valid saved tasks into the specified task list.
      *
      * @param taskList Task list into which saved tasks are loaded.
+     * @return True if the data file exists, or false otherwise.
+     * @throws IOException If the data file cannot be read.
      */
-    public void loadInto(TaskList taskList) {
-        try {
-            if (Files.notExists(this.filePath)) {
-                System.out.println("There are no saved tasks yet!");
-                return;
-            }
-
-            List<String> lines = Files.readAllLines(this.filePath, StandardCharsets.UTF_8);
-            List<Task> loadedTasks = new ArrayList<>();
-
-            for (String line : lines) {
-                if (!line.isBlank()) {
-                    loadedTasks.add(Parser.parseStoredTask(line));
-                }
-            }
-
-            for (Task task : loadedTasks) {
-                taskList.addTask(task);
-            }
-            System.out.println("All tasks were loaded!");
-        } catch (IOException | IllegalArgumentException e) {
-            System.out.println("Sorry, I couldn't load your tasks: " + e.getMessage());
+    public boolean loadInto(TaskList taskList) throws IOException {
+        if (Files.notExists(this.filePath)) {
+            return false;
         }
+
+        List<String> lines = Files.readAllLines(this.filePath, StandardCharsets.UTF_8);
+        List<Task> loadedTasks = new ArrayList<>();
+
+        for (String line : lines) {
+            if (!line.isBlank()) {
+                loadedTasks.add(Parser.parseStoredTask(line));
+            }
+        }
+
+        for (Task task : loadedTasks) {
+            taskList.addTask(task);
+        }
+        return true;
     }
 
     /**
      * Saves all tasks from the specified task list to the data file.
      *
      * @param taskList Task list to save.
+     * @throws IOException If the tasks cannot be saved.
      */
-    public void saveFrom(TaskList taskList) {
+    public void saveFrom(TaskList taskList) throws IOException {
         List<String> lines = new ArrayList<>();
 
         for (Task task : taskList.getAllTasks()) {
             String line = task.toDataString();
             lines.add(line);
         }
-        try {
-            Files.write(this.filePath, lines, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            System.out.println("Sorry, I couldn't save your tasks: " + e.getMessage());
-            return;
-        }
-
-        System.out.println("I've saved your tasks.");
+        Files.write(this.filePath, lines, StandardCharsets.UTF_8);
     }
 }

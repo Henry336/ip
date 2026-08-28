@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 /**
  * Runs the Ari task manager.
  */
@@ -11,8 +13,22 @@ public class Ari {
 
         // Initialize the storage
         // Load any data from pre-existing file
-        storage.start();
-        storage.loadInto(taskList);
+        try {
+            storage.start();
+        } catch (IOException e) {
+            ui.showStorageInitializationError(e.getMessage());
+        }
+
+        try {
+            boolean isDataFilePresent = storage.loadInto(taskList);
+            if (isDataFilePresent) {
+                ui.showTasksLoaded();
+            } else {
+                ui.showNoSavedTasks();
+            }
+        } catch (IOException | IllegalArgumentException e) {
+            ui.showLoadingError(e.getMessage());
+        }
 
         // Input loop
         while (true) {
@@ -21,7 +37,12 @@ public class Ari {
 
             // Save the modified data to the specified path and exit the program
             if (command.equals(CommandType.EXIT) || command.equals(CommandType.BYE)) {
-                storage.saveFrom(taskList);
+                try {
+                    storage.saveFrom(taskList);
+                    ui.showTasksSaved();
+                } catch (IOException e) {
+                    ui.showSavingError(e.getMessage());
+                }
                 ui.showMessage(command.getDescription());
                 break;
             }
