@@ -28,6 +28,16 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.
 
+## Java coding standard
+
+Before modifying Java code, refer to the course's [Java coding standard](https://se-education.org/guides/conventions/java/intermediate.html).
+
+In particular:
+
+* Use multi-line K&R/Egyptian braces for classes, constructors, methods, loops, and conditionals. Do not collapse a body onto one line.
+* Indent `case` and `default` labels one level deeper than their `switch` statement, and indent their statements one further level.
+* Keep lines within the 120-character hard limit and use 4-space basic indentation.
+
 ## Verification after code changes
 
 After every completed update to application or test code, before reporting the work as complete:

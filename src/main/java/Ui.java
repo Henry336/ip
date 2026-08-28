@@ -16,15 +16,25 @@ public class Ui {
     private static final String COMMAND_LIST =
             "Here is a list of supported commands:\n\n"
                     + "Keyword  |                 Format                | Description \n\n"
-                    + "todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)\n"
-                    + "deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)\n"
-                    + "event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)\n"
-                    + "mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)\n"
-                    + "unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)\n"
-                    + "delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)\n"
-                    + "list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)\n"
-                    + "exit     | exit                                  | Ends the program (e.g., exit)\n"
-                    + "bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)\n";
+                    + "todo     | todo <task>                           | "
+                    + "Adds a task to your list of tasks! (e.g., todo read book)\n"
+                    + "deadline | deadline <task> /by <time>            | "
+                    + "Adds a task with a deadline. (e.g., deadline do something /by Sunday)\n"
+                    + "event    | event <event> /from <time> /to <time> | "
+                    + "Adds an event with 'from' and 'to' times. "
+                    + "(e.g., event dinner party /from Monday 2pm /to 9pm)\n"
+                    + "mark     | mark <task ID>                        | "
+                    + "Marks the task with the task ID as done! (e.g., mark 1)\n"
+                    + "unmark   | unmark <task ID>                      | "
+                    + "Does the opposite of mark. (e.g., unmark 1)\n"
+                    + "delete   | delete <task ID>                      | "
+                    + "Removes the specified task from the list (e.g., delete 1)\n"
+                    + "list     | list                                  | "
+                    + "Lists all your tasks in the order they were added in! (e.g., list)\n"
+                    + "exit     | exit                                  | "
+                    + "Ends the program (e.g., exit)\n"
+                    + "bye      | bye                                   | "
+                    + "Serves the same purpose as 'exit' (e.g., bye)\n";
 
     private final Scanner scanner;
 
