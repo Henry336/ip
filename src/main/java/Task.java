@@ -7,9 +7,9 @@ public abstract class Task {
     protected final String type;
 
     protected Task(String description, String type) {
-        this.description = requireNonBlank(description, "Task description");
+        this.description = description;
         this.isDone = false;
-        this.type = requireNonBlank(type, "Task type");
+        this.type = type;
     }
 
     public void changeState() {
@@ -22,20 +22,6 @@ public abstract class Task {
 
     public void unmarkTask() {
         this.isDone = false;
-    }
-
-    /**
-     * Validates and returns a required task field.
-     *
-     * @param value Field value to validate.
-     * @param fieldName Field name used in the validation message.
-     * @return The validated value.
-     */
-    protected static String requireNonBlank(String value, String fieldName) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException(fieldName + " cannot be empty");
-        }
-        return value;
     }
 
     public String toDataString() {

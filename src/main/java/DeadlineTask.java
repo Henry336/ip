@@ -12,7 +12,7 @@ public class DeadlineTask extends Task {
      */
     public DeadlineTask(String description, String deadline) {
         super(description, "D");
-        this.deadline = requireNonBlank(deadline, "Deadline");
+        this.deadline = Parser.parseDateTime(deadline);
     }
 
     public String getDeadline() {

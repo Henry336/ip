@@ -14,8 +14,8 @@ public class EventTask extends Task {
      */
     public EventTask(String description, String from, String to) {
         super(description, "E");
-        this.from = requireNonBlank(from, "Event start");
-        this.to = requireNonBlank(to, "Event end");
+        this.from = Parser.parseDateTime(from);
+        this.to = Parser.parseDateTime(to);
     }
 
     public String[] getEventTime() {

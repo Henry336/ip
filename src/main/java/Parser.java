@@ -1,7 +1,13 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 /**
  * Converts raw user input and saved records into domain values.
  */
 public class Parser {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy");
+
     /**
      * Identifies the command represented by the user's input.
      *
@@ -154,4 +160,19 @@ public class Parser {
         );
     }
 
+    /**
+     * Converts input string to a datetime string if possible,
+     * otherwise, return original string
+     *
+     * @param s
+     * @return Respective datetime string or input string
+     */
+    public static String parseDateTime(String s) {
+        try {
+            LocalDate date = LocalDate.parse(s);
+            return date.format(formatter);
+        } catch (DateTimeParseException e) {
+            return s;
+        }
+    }
 }
