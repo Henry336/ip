@@ -1,25 +1,25 @@
 # Latest Console UI Test Results
 
-- Run at: 2026-08-21T15:37:56+08:00
+- Run at: 2026-08-28T15:22:42+08:00
 - Java: openjdk version "25.0.4" 2026-07-21 LTS
-- Compilation: PASS
-- Test cases run: 12
-- Passed: 12
+- Compilation: FAIL
+- Test cases run: 0
+- Passed: 0
 - Failed: 0
+
+## Compiler output
+
+```text
+C:\Users\Henry\IdeaProjects\Chatbot Project\ip\src\main\java\Storage.java:29: error: constructor Task in class Task cannot be applied to given types;
+                Task task = new Task();
+                            ^
+  required: String,String
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+1 error
+```
 
 ## Results in execution order
 
 | Test case | Result |
 | --- | --- |
-| TC-001 — Unknown command and empty task list | PASS |
-| TC-011 — Preserve a multiword deadline string | PASS |
-| TC-012 — Accept date-only event strings | PASS |
-| TC-002 — Todo task lifecycle | PASS |
-| TC-003 — Deadline and event formatting | PASS |
-| TC-004 — Reject task ID zero | PASS |
-| TC-005 — Delete tasks | PASS |
-| TC-006 — Recoverable input errors | PASS |
-| TC-007 — Reject nonpositive IDs with an existing task | PASS |
-| TC-008 — Delete from an empty list | PASS |
-| TC-009 — Reindex tasks after deletion | PASS |
-| TC-010 — Accept surrounding and repeated whitespace | PASS |

@@ -1,48 +1,23 @@
-import java.util.Collections;
 import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Stores and manages the user's tasks.
+ */
 public class TaskArray {
-    private ArrayList<Task> tasks;
+    private final ArrayList<Task> tasks;
 
     public TaskArray() {
         tasks = new ArrayList<>();
     }
 
-    public String addTask(String description, String type) throws EmptyArgumentException {
-        String[] taskArr = description.strip().split("/");
-        String[] cmdArr = taskArr[0].split(" ");
-        if (cmdArr.length < 2) {
-            throw new EmptyArgumentException(cmdArr[0]);
-        }
-
-        Task taskToAdd = new TodoTask(description);
-
-        switch (type) {
-            case "T":
-                break;
-            case "D":
-                // rmb to move the following logic inside DeadlineTask class so that the abstraction layer is preserved
-                String[] taskArr1 = description.strip().split("/by"); // [deadline return book, by Sunday)
-                String taskName1 = taskArr1[0].strip();
-                String deadline = taskArr1[1].strip();
-
-                taskToAdd = new DeadlineTask(taskName1, deadline);
-                break;
-            case "E":
-                // same as the comment above for DeadlineTask
-                String[] taskArr2 = description.strip().split("/from");
-                String taskName2 = taskArr2[0].strip();
-
-                String[] fromToArr = taskArr2[1].split("/to");
-                String from = fromToArr[0].strip();
-                String to = fromToArr[1].strip();
-
-                taskToAdd = new EventTask(taskName2, from, to);
-                break;
-        }
-
-        this.tasks.add(taskToAdd);
-        return taskToAdd.toString();
+    /**
+     * Adds the specified task to the task list.
+     *
+     * @param task Task to add.
+     */
+    public void addTask(Task task) {
+        this.tasks.add(task);
     }
 
     public String markTask(int id) throws TaskNotFoundException {
@@ -78,11 +53,13 @@ public class TaskArray {
         return deletedTask.toString();
     }
 
-    public ArrayList<Task> getAllTasks() {
-        return this.tasks;
+    public List<Task> getAllTasks() {
+        return List.copyOf(this.tasks);
     }
 
-    public Task getTask(int id) { return this.tasks.get(id); }
+    public Task getTask(int id) {
+        return this.tasks.get(id);
+    }
 
     public int getLength() {
         return this.tasks.size();
@@ -97,7 +74,11 @@ public class TaskArray {
             return "You currently have no tasks remaining. Good job!";
         }
 
-        return String.format("You currently have %s %s in the list! Better get working...", this.tasks.size(), taskNounForm);
+        return String.format(
+                "You currently have %s %s in the list! Better get working...",
+                this.tasks.size(),
+                taskNounForm
+        );
     }
 
     @Override

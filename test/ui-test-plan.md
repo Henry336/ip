@@ -69,6 +69,7 @@ bye      | bye                                   | Serves the same purpose as 'e
 Sorry, I didn't get that... Could you say something else? ^.^
 Here are the tasks on your list:
 You currently have no tasks remaining. Good job!
+Yippie! I've finished saving your tasks!
 Bye Bye. See you again!
 ```
 
@@ -124,6 +125,7 @@ ____________________________________________________________
 Here are the tasks on your list:
 1. [D][ ] do homework (by: no idea :-p)
 
+Yippie! I've finished saving your tasks!
 Bye Bye. See you again!
 ```
 
@@ -179,6 +181,7 @@ ____________________________________________________________
 Here are the tasks on your list:
 1. [E][ ] orientation week (from: 4/10/2019 to: 11/10/2019)
 
+Yippie! I've finished saving your tasks!
 Bye Bye. See you again!
 ```
 
@@ -246,6 +249,7 @@ Gotcha, I've unmarked this task:
  [T][ ] read book
 ____________________________________________________________
 
+Yippie! I've finished saving your tasks!
 Bye Bye. See you again!
 ```
 
@@ -309,6 +313,7 @@ Here are the tasks on your list:
 1. [D][ ] return book (by: Sunday)
 2. [E][ ] project meeting (from: Monday 2pm to: 4pm)
 
+Yippie! I've finished saving your tasks!
 Bye Bye. See you again!
 ```
 
@@ -356,6 +361,7 @@ bye      | bye                                   | Serves the same purpose as 'e
 
 Task 0 does not exist!
 Send 'list' to see which tasks you have left!
+Yippie! I've finished saving your tasks!
 Bye Bye. See you again!
 ```
 
@@ -421,6 +427,7 @@ Fortunately, there was nothing to delete.
 Good job! Keep this up!
 ____________________________________________________________
 
+Yippie! I've finished saving your tasks!
 Bye Bye. See you again!
 ```
 
@@ -476,6 +483,7 @@ Oh no! You can't have an empty description for events
 Oops! You can only enter integer IDs. Try again!
 Task 1 does not exist!
 Send 'list' to see which tasks you have left!
+Yippie! I've finished saving your tasks!
 Bye Bye. See you again!
 ```
 
@@ -540,6 +548,7 @@ Send 'list' to see which tasks you have left!
 Here are the tasks on your list:
 1. [T][ ] keep me
 
+Yippie! I've finished saving your tasks!
 Bye Bye. See you again!
 ```
 
@@ -591,6 +600,7 @@ Fortunately, there was nothing to delete.
 Good job! Keep this up!
 ____________________________________________________________
 
+Yippie! I've finished saving your tasks!
 Bye Bye. See you again!
 ```
 
@@ -666,6 +676,7 @@ Good job! I've marked this task as done:
  [T][X] second
 ____________________________________________________________
 
+Yippie! I've finished saving your tasks!
 Bye Bye. See you again!
 ```
 
@@ -721,5 +732,6 @@ ____________________________________________________________
 Here are the tasks on your list:
 1. [T][ ] spaced task
 
+Yippie! I've finished saving your tasks!
 Bye Bye. See you again!
 ```

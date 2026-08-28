@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Ari {
     public static String name = "Ari";
     public static int idx = 0;
-    public static TaskArray tasks = new TaskArray();
+    public static TaskArray taskArr = new TaskArray();
     public static String listOfCmds = "Here is a list of supported commands:\n\n"
             + "Keyword  |                 Format                | Description \n\n"
             + "todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)\n"
@@ -32,17 +32,27 @@ public class Ari {
     }
 
     public static void main(String[] args) {
+        // Initialize the scanner
         Scanner scanner = new Scanner(System.in);
+
+        // Greet the user
         print(banner);
         print("Hola, I'm Ari!\n" + "Need any help?\n");
         print(listOfCmds);
 
+        // Initialize the storage
+        // Load any data from pre-existing file
+        Storage.start();
+        Storage.loadInto(taskArr);
+
+        // Input loop
         while (true) {
             String input = scanner.nextLine();
             CommandType command = CommandType.of(input);
 
+            // Save the modified data to the specified path and exit the program
             if (command.equals(CommandType.EXIT) || command.equals(CommandType.BYE)) {
-                Storage.save(tasks);
+                Storage.saveFrom(taskArr);
                 print(command.getDescription());
                 break;
             }
@@ -51,15 +61,15 @@ public class Ari {
                 switch (command) {
                     case LIST:
                         print(command.getDescription());
-                        print(tasks.toString());
+                        print(taskArr.toString());
                         break;
 
                     case MARK:
                     case UNMARK:
                         int idx = getIdx(input);
                         String changedTask = (command.equals(CommandType.MARK))
-                                ? tasks.markTask(idx)
-                                : tasks.unmarkTask(idx);
+                                ? taskArr.markTask(idx)
+                                : taskArr.unmarkTask(idx);
 
                         print(String.format(
                                 "____________________________________________________________\n" +
@@ -71,46 +81,49 @@ public class Ari {
                         break;
 
                     case TODO:
-                        String addedTaskT = tasks.addTask(input, "T");
+                        Task todoTask = new TodoTask(input);
+                        taskArr.addTask(todoTask);
                         print(String.format(
                                 "____________________________________________________________\n" +
                                         "%s\n %s\n%s\n" +
                                         "____________________________________________________________\n",
                                 command.getDescription(),
-                                addedTaskT.toString(),
-                                tasks.getLengthText()
+                                todoTask,
+                                taskArr.getLengthText()
                         ));
                         break;
 
                     case DEADLINE:
-                        String addedTaskD = tasks.addTask(input, "D");
+                        Task deadlineTask = new DeadlineTask(input);
+                        taskArr.addTask(deadlineTask);
                         print(String.format(
                                 "____________________________________________________________\n" +
                                         "%s\n %s\n%s\n" +
                                         "____________________________________________________________\n",
                                 command.getDescription(),
-                                addedTaskD,
-                                tasks.getLengthText()
+                                deadlineTask,
+                                taskArr.getLengthText()
                         ));
                         break;
 
                     case EVENT:
-                        String addedTaskE = tasks.addTask(input, "E");
+                        Task eventTask = new EventTask(input);
+                        taskArr.addTask(eventTask);
                         print(String.format(
                                 "____________________________________________________________\n" +
                                         "%s\n %s\n%s\n" +
                                         "____________________________________________________________\n",
                                 command.getDescription(),
-                                addedTaskE,
-                                tasks.getLengthText()
+                                eventTask,
+                                taskArr.getLengthText()
                         ));
                         break;
 
                     case DELETE:
                         int taskId = getIdx(input);
                         String startingText = command.getDescription();
-                        String middleText = tasks.deleteTask(taskId);
-                        String endingText = tasks.getLengthText();
+                        String middleText = taskArr.deleteTask(taskId);
+                        String endingText = taskArr.getLengthText();
 
                         if (middleText.equals("None")) {
                             startingText = "Fortunately, there was nothing to delete.";
