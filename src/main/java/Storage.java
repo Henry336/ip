@@ -32,9 +32,9 @@ public class Storage {
     /**
      * Loads all valid saved tasks into the specified task list.
      *
-     * @param taskArray Task list into which saved tasks are loaded.
+     * @param taskList Task list into which saved tasks are loaded.
      */
-    public static void loadInto(TaskArray taskArray) {
+    public static void loadInto(TaskList taskList) {
         try {
             if (Files.notExists(FILE_PATH)) {
                 System.out.println("There are no saved tasks yet!");
@@ -51,7 +51,7 @@ public class Storage {
             }
 
             for (Task task : loadedTasks) {
-                taskArray.addTask(task);
+                taskList.addTask(task);
             }
             System.out.println("All tasks were loaded!");
         } catch (IOException | IllegalArgumentException e) {
@@ -62,12 +62,12 @@ public class Storage {
     /**
      * Saves all tasks from the specified task list to the data file.
      *
-     * @param taskArray Task list to save.
+     * @param taskList Task list to save.
      */
-    public static void saveFrom(TaskArray taskArray) {
+    public static void saveFrom(TaskList taskList) {
         List<String> lines = new ArrayList<>();
 
-        for (Task task : taskArray.getAllTasks()) {
+        for (Task task : taskList.getAllTasks()) {
             String line = task.toDataString();
             lines.add(line);
         }

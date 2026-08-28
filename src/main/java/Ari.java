@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Ari {
     public static String name = "Ari";
     public static int idx = 0;
-    public static TaskArray taskArr = new TaskArray();
+    public static TaskList taskList = new TaskList();
     public static String listOfCmds = "Here is a list of supported commands:\n\n"
             + "Keyword  |                 Format                | Description \n\n"
             + "todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)\n"
@@ -38,7 +38,7 @@ public class Ari {
         // Initialize the storage
         // Load any data from pre-existing file
         Storage.start();
-        Storage.loadInto(taskArr);
+        Storage.loadInto(taskList);
 
         // Input loop
         while (true) {
@@ -47,7 +47,7 @@ public class Ari {
 
             // Save the modified data to the specified path and exit the program
             if (command.equals(CommandType.EXIT) || command.equals(CommandType.BYE)) {
-                Storage.saveFrom(taskArr);
+                Storage.saveFrom(taskList);
                 print(command.getDescription());
                 break;
             }
@@ -56,15 +56,15 @@ public class Ari {
                 switch (command) {
                     case LIST:
                         print(command.getDescription());
-                        print(taskArr.toString());
+                        print(taskList.toString());
                         break;
 
                     case MARK:
                     case UNMARK:
                         int idx = Parser.parseTaskId(input);
                         String changedTask = (command.equals(CommandType.MARK))
-                                ? taskArr.markTask(idx)
-                                : taskArr.unmarkTask(idx);
+                                ? taskList.markTask(idx)
+                                : taskList.unmarkTask(idx);
 
                         print(String.format(
                                 "____________________________________________________________\n" +
@@ -79,22 +79,22 @@ public class Ari {
                     case DEADLINE:
                     case EVENT:
                         Task addedTask = Parser.parseTask(input, command);
-                        taskArr.addTask(addedTask);
+                        taskList.addTask(addedTask);
                         print(String.format(
                                 "____________________________________________________________\n" +
                                         "%s\n %s\n%s\n" +
                                         "____________________________________________________________\n",
                                 command.getDescription(),
                                 addedTask,
-                                taskArr.getLengthText()
+                                taskList.getLengthText()
                         ));
                         break;
 
                     case DELETE:
                         int taskId = Parser.parseTaskId(input);
                         String startingText = command.getDescription();
-                        String middleText = taskArr.deleteTask(taskId);
-                        String endingText = taskArr.getLengthText();
+                        String middleText = taskList.deleteTask(taskId);
+                        String endingText = taskList.getLengthText();
 
                         if (middleText.equals("None")) {
                             startingText = "Fortunately, there was nothing to delete.";
