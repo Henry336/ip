@@ -5,13 +5,14 @@ public class Ari {
     public static void main(String[] args) {
         Ui ui = new Ui();
         TaskList taskList = new TaskList();
+        Storage storage = new Storage("data/ari.txt");
 
         ui.showWelcome();
 
         // Initialize the storage
         // Load any data from pre-existing file
-        Storage.start();
-        Storage.loadInto(taskList);
+        storage.start();
+        storage.loadInto(taskList);
 
         // Input loop
         while (true) {
@@ -20,7 +21,7 @@ public class Ari {
 
             // Save the modified data to the specified path and exit the program
             if (command.equals(CommandType.EXIT) || command.equals(CommandType.BYE)) {
-                Storage.saveFrom(taskList);
+                storage.saveFrom(taskList);
                 ui.showMessage(command.getDescription());
                 break;
             }

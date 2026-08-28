@@ -9,17 +9,26 @@ import java.util.List;
  * Initializes the data file and handles task persistence.
  */
 public class Storage {
-    private static final Path FILE_PATH = Path.of("data", "ari.txt");
+    private final Path filePath;
+
+    /**
+     * Creates a storage object that uses the specified file path.
+     *
+     * @param filePath Path of the task data file.
+     */
+    public Storage(String filePath) {
+        this.filePath = Path.of(filePath);
+    }
 
     /**
      * Creates the data directory and file when they do not already exist.
      */
-    public static void start() {
+    public void start() {
         try {
-            Files.createDirectories(FILE_PATH.getParent());
+            Files.createDirectories(this.filePath.getParent());
 
-            if (Files.notExists(FILE_PATH)) {
-                Files.createFile(FILE_PATH);
+            if (Files.notExists(this.filePath)) {
+                Files.createFile(this.filePath);
             }
         } catch (IOException e) {
             System.out.println(
@@ -34,14 +43,14 @@ public class Storage {
      *
      * @param taskList Task list into which saved tasks are loaded.
      */
-    public static void loadInto(TaskList taskList) {
+    public void loadInto(TaskList taskList) {
         try {
-            if (Files.notExists(FILE_PATH)) {
+            if (Files.notExists(this.filePath)) {
                 System.out.println("There are no saved tasks yet!");
                 return;
             }
 
-            List<String> lines = Files.readAllLines(FILE_PATH, StandardCharsets.UTF_8);
+            List<String> lines = Files.readAllLines(this.filePath, StandardCharsets.UTF_8);
             List<Task> loadedTasks = new ArrayList<>();
 
             for (String line : lines) {
@@ -64,7 +73,7 @@ public class Storage {
      *
      * @param taskList Task list to save.
      */
-    public static void saveFrom(TaskList taskList) {
+    public void saveFrom(TaskList taskList) {
         List<String> lines = new ArrayList<>();
 
         for (Task task : taskList.getAllTasks()) {
@@ -72,7 +81,7 @@ public class Storage {
             lines.add(line);
         }
         try {
-            Files.write(FILE_PATH, lines, StandardCharsets.UTF_8);
+            Files.write(this.filePath, lines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             System.out.println("Sorry, I couldn't save your tasks: " + e.getMessage());
             return;
