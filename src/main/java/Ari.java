@@ -4,64 +4,53 @@ import java.io.IOException;
  * Runs the Ari task manager.
  */
 public class Ari {
-    public static void main(String[] args) {
-        Ui ui = new Ui();
-        TaskList taskList = new TaskList();
-        Storage storage = new Storage("data/ari.txt");
+    private final Storage storage;
+    private final TaskList tasks;
+    private final Ui ui;
 
-        ui.showWelcome();
+    /**
+     * Creates Ari with the components needed to run the task manager.
+     *
+     * @param filePath Path of the task data file.
+     */
+    public Ari(String filePath) {
+        this.storage = new Storage(filePath);
+        this.tasks = new TaskList();
+        this.ui = new Ui();
+    }
 
-        // Initialize the storage
-        // Load any data from pre-existing file
-        try {
-            storage.start();
-        } catch (IOException e) {
-            ui.showStorageInitializationError(e.getMessage());
-        }
+    /**
+     * Starts Ari and processes commands until the user exits.
+     */
+    public void run() {
+        this.ui.showWelcome();
+        loadTasks();
 
-        try {
-            boolean isDataFilePresent = storage.loadInto(taskList);
-            if (isDataFilePresent) {
-                ui.showTasksLoaded();
-            } else {
-                ui.showNoSavedTasks();
-            }
-        } catch (IOException | IllegalArgumentException e) {
-            ui.showLoadingError(e.getMessage());
-        }
-
-        // Input loop
         while (true) {
-            String input = ui.readCommand();
+            String input = this.ui.readCommand();
             CommandType command = Parser.parseCommandType(input);
 
-            // Save the modified data to the specified path and exit the program
             if (command.equals(CommandType.EXIT) || command.equals(CommandType.BYE)) {
-                try {
-                    storage.saveFrom(taskList);
-                    ui.showTasksSaved();
-                } catch (IOException e) {
-                    ui.showSavingError(e.getMessage());
-                }
-                ui.showMessage(command.getDescription());
+                saveTasks();
+                this.ui.showMessage(command.getDescription());
                 break;
             }
 
             try {
                 switch (command) {
                     case LIST:
-                        ui.showMessage(command.getDescription());
-                        ui.showMessage(taskList.toString());
+                        this.ui.showMessage(command.getDescription());
+                        this.ui.showMessage(this.tasks.toString());
                         break;
 
                     case MARK:
                     case UNMARK:
-                        int idx = Parser.parseTaskId(input);
+                        int index = Parser.parseTaskId(input);
                         String changedTask = (command.equals(CommandType.MARK))
-                                ? taskList.markTask(idx)
-                                : taskList.unmarkTask(idx);
+                                ? this.tasks.markTask(index)
+                                : this.tasks.unmarkTask(index);
 
-                        ui.showMessageWithLines(String.format(
+                        this.ui.showMessageWithLines(String.format(
                                 "%s\n %s",
                                 command.getDescription(),
                                 changedTask)
@@ -72,20 +61,20 @@ public class Ari {
                     case DEADLINE:
                     case EVENT:
                         Task addedTask = Parser.parseTask(input, command);
-                        taskList.addTask(addedTask);
-                        ui.showMessageWithLines(String.format(
+                        this.tasks.addTask(addedTask);
+                        this.ui.showMessageWithLines(String.format(
                                 "%s\n %s\n%s",
                                 command.getDescription(),
                                 addedTask,
-                                taskList.getLengthText()
+                                this.tasks.getLengthText()
                         ));
                         break;
 
                     case DELETE:
                         int taskId = Parser.parseTaskId(input);
                         String startingText = command.getDescription();
-                        String middleText = taskList.deleteTask(taskId);
-                        String endingText = taskList.getLengthText();
+                        String middleText = this.tasks.deleteTask(taskId);
+                        String endingText = this.tasks.getLengthText();
 
                         if (middleText.equals("None")) {
                             startingText = "Fortunately, there was nothing to delete.";
@@ -93,7 +82,7 @@ public class Ari {
                             endingText = "Good job! Keep this up!";
                         }
 
-                        ui.showMessageWithLines(String.format(
+                        this.ui.showMessageWithLines(String.format(
                                 "%s\n %s\n%s",
                                 startingText,
                                 middleText,
@@ -102,18 +91,57 @@ public class Ari {
                         break;
 
                     case UNKNOWN:
-                        ui.showMessage("Sorry, I didn't get that... Could you say something else? ^.^");
+                        this.ui.showMessage(
+                                "Sorry, I didn't get that... Could you say something else? ^.^"
+                        );
                         break;
                 }
             } catch (EmptyArgumentException e) {
-                ui.showMessage(e.getMessage());
+                this.ui.showMessage(e.getMessage());
             } catch (TaskNotFoundException e) {
-                ui.showMessage(e.getMessage());
+                this.ui.showMessage(e.getMessage());
             } catch (NumberFormatException e) {
-                ui.showMessage("Oops! You can only enter integer IDs. Try again!");
+                this.ui.showMessage("Oops! You can only enter integer IDs. Try again!");
             }
         }
 
-        ui.close();
+        this.ui.close();
+    }
+
+    private void loadTasks() {
+        try {
+            this.storage.start();
+        } catch (IOException e) {
+            this.ui.showStorageInitializationError(e.getMessage());
+        }
+
+        try {
+            boolean isDataFilePresent = this.storage.loadInto(this.tasks);
+            if (isDataFilePresent) {
+                this.ui.showTasksLoaded();
+            } else {
+                this.ui.showNoSavedTasks();
+            }
+        } catch (IOException | IllegalArgumentException e) {
+            this.ui.showLoadingError(e.getMessage());
+        }
+    }
+
+    private void saveTasks() {
+        try {
+            this.storage.saveFrom(this.tasks);
+            this.ui.showTasksSaved();
+        } catch (IOException e) {
+            this.ui.showSavingError(e.getMessage());
+        }
+    }
+
+    /**
+     * Creates and runs Ari using the default task data file.
+     *
+     * @param args Command-line arguments, which are not used.
+     */
+    public static void main(String[] args) {
+        new Ari("data/ari.txt").run();
     }
 }
