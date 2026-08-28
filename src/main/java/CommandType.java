@@ -32,21 +32,4 @@ public enum CommandType {
         return this.description;
     }
 
-    public static CommandType of(String rawInput) {
-        if (rawInput == null || rawInput.isBlank()) {
-            // don't want to try and accept a null or blank space yet
-            return UNKNOWN;
-        }
-
-        String cmd = rawInput.strip().split("\\s+")[0];
-        // .strip() takes away all the trailing whitespace like python does
-        // \\s means any 'whitespace' character that may be in the middle
-        // + means one or more times
-
-        try {
-            return CommandType.valueOf(cmd.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return UNKNOWN; // like 'read book', 'do homework', 'study', etc.
-        }
-    }
 }

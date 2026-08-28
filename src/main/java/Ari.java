@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Ari {
     public static String name = "Ari";
     public static int idx = 0;
-    public static TaskArray tasks = new TaskArray();
+    public static TaskArray taskArr = new TaskArray();
     public static String listOfCmds = "Here is a list of supported commands:\n\n"
             + "Keyword  |                 Format                | Description \n\n"
             + "todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)\n"
@@ -26,22 +26,28 @@ public class Ari {
         System.out.println(s);
     }
 
-    public static int getIdx(String s) {
-        String result = s.strip().split("\\s+")[1];
-        return Integer.parseInt(result);
-    }
-
     public static void main(String[] args) {
+        // Initialize the scanner
         Scanner scanner = new Scanner(System.in);
+
+        // Greet the user
         print(banner);
         print("Hola, I'm Ari!\n" + "Need any help?\n");
         print(listOfCmds);
 
+        // Initialize the storage
+        // Load any data from pre-existing file
+        Storage.start();
+        Storage.loadInto(taskArr);
+
+        // Input loop
         while (true) {
             String input = scanner.nextLine();
-            CommandType command = CommandType.of(input);
+            CommandType command = Parser.parseCommandType(input);
 
+            // Save the modified data to the specified path and exit the program
             if (command.equals(CommandType.EXIT) || command.equals(CommandType.BYE)) {
+                Storage.saveFrom(taskArr);
                 print(command.getDescription());
                 break;
             }
@@ -50,15 +56,15 @@ public class Ari {
                 switch (command) {
                     case LIST:
                         print(command.getDescription());
-                        print(tasks.toString());
+                        print(taskArr.toString());
                         break;
 
                     case MARK:
                     case UNMARK:
-                        int idx = getIdx(input);
+                        int idx = Parser.parseTaskId(input);
                         String changedTask = (command.equals(CommandType.MARK))
-                                ? tasks.markTask(idx)
-                                : tasks.unmarkTask(idx);
+                                ? taskArr.markTask(idx)
+                                : taskArr.unmarkTask(idx);
 
                         print(String.format(
                                 "____________________________________________________________\n" +
@@ -70,46 +76,25 @@ public class Ari {
                         break;
 
                     case TODO:
-                        String addedTaskT = tasks.addTask(input, "T");
-                        print(String.format(
-                                "____________________________________________________________\n" +
-                                        "%s\n %s\n%s\n" +
-                                        "____________________________________________________________\n",
-                                command.getDescription(),
-                                addedTaskT.toString(),
-                                tasks.getLengthText()
-                        ));
-                        break;
-
                     case DEADLINE:
-                        String addedTaskD = tasks.addTask(input, "D");
-                        print(String.format(
-                                "____________________________________________________________\n" +
-                                        "%s\n %s\n%s\n" +
-                                        "____________________________________________________________\n",
-                                command.getDescription(),
-                                addedTaskD,
-                                tasks.getLengthText()
-                        ));
-                        break;
-
                     case EVENT:
-                        String addedTaskE = tasks.addTask(input, "E");
+                        Task addedTask = Parser.parseTask(input, command);
+                        taskArr.addTask(addedTask);
                         print(String.format(
                                 "____________________________________________________________\n" +
                                         "%s\n %s\n%s\n" +
                                         "____________________________________________________________\n",
                                 command.getDescription(),
-                                addedTaskE,
-                                tasks.getLengthText()
+                                addedTask,
+                                taskArr.getLengthText()
                         ));
                         break;
 
                     case DELETE:
-                        int taskId = getIdx(input);
+                        int taskId = Parser.parseTaskId(input);
                         String startingText = command.getDescription();
-                        String middleText = tasks.deleteTask(taskId);
-                        String endingText = tasks.getLengthText();
+                        String middleText = taskArr.deleteTask(taskId);
+                        String endingText = taskArr.getLengthText();
 
                         if (middleText.equals("None")) {
                             startingText = "Fortunately, there was nothing to delete.";

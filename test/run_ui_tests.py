@@ -16,6 +16,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -37,6 +38,8 @@ class TestCase:
     aim: str
     input_text: str
     expected_output: str
+    initial_data: str | None
+    expected_data: str | None
 
 
 @dataclass(frozen=True)
@@ -47,6 +50,7 @@ class TestResult:
     actual_output: str
     standard_error: str
     exit_code: int
+    actual_data: str | None
     passed: bool
 
 
@@ -59,24 +63,63 @@ def normalize_newlines(text: str) -> str:
 def parse_cases(plan_text: str) -> list[TestCase]:
     """Extract ordered test cases from the documented Markdown structure."""
 
+    normalized_plan = normalize_newlines(plan_text)
     pattern = re.compile(
-        r"^## (?P<name>TC-[^\n]+)\n"
-        r".*?^### Aim\n\n(?P<aim>.*?)\n\n"
-        r".*?^### Input\n\n```text\n(?P<input>.*?)\n```\n"
-        r".*?^### Expected output\n\n```text\n(?P<expected>.*?)\n```",
+        r"^## (?P<name>TC-[^\n]+)\n(?P<body>.*?)(?=^## TC-|\Z)",
         re.MULTILINE | re.DOTALL,
     )
     cases = []
-    for match in pattern.finditer(normalize_newlines(plan_text)):
+    for match in pattern.finditer(normalized_plan):
+        body = match.group("body")
+        aim = extract_prose_section(body, "Aim")
+        input_text = extract_text_section(body, "Input")
+        expected_output = extract_text_section(body, "Expected output")
+        initial_data = extract_optional_text_section(body, "Initial data file")
+        expected_data = extract_optional_text_section(body, "Expected data file")
         cases.append(
             TestCase(
                 name=match.group("name"),
-                aim=match.group("aim"),
-                input_text=match.group("input"),
-                expected_output=match.group("expected") + "\n",
+                aim=aim,
+                input_text=input_text,
+                expected_output=expected_output + "\n",
+                initial_data=initial_data,
+                expected_data=expected_data,
             )
         )
     return cases
+
+
+def extract_prose_section(body: str, heading: str) -> str:
+    """Extract a required prose section from a test case body."""
+
+    match = re.search(
+        rf"^### {re.escape(heading)}\n\n(?P<content>.*?)(?=\n\n### )",
+        body,
+        re.MULTILINE | re.DOTALL,
+    )
+    if not match:
+        raise ValueError(f"Missing {heading} section in test plan")
+    return match.group("content")
+
+
+def extract_text_section(body: str, heading: str) -> str:
+    """Extract a required fenced-text section from a test case body."""
+
+    content = extract_optional_text_section(body, heading)
+    if content is None:
+        raise ValueError(f"Missing {heading} section in test plan")
+    return content
+
+
+def extract_optional_text_section(body: str, heading: str) -> str | None:
+    """Extract an optional fenced-text section from a test case body."""
+
+    match = re.search(
+        rf"^### {re.escape(heading)}\n\n```text\n(?P<content>.*?)\n```",
+        body,
+        re.MULTILINE | re.DOTALL,
+    )
+    return match.group("content") if match else None
 
 
 def executable_name(name: str) -> str:
@@ -231,9 +274,7 @@ def write_results(
                 "",
                 "### Difference",
                 "",
-                first_difference(
-                    result.case.expected_output, result.actual_output
-                ),
+                result_difference(result),
                 "",
                 "### Actual output",
                 "",
@@ -244,6 +285,23 @@ def write_results(
                 *markdown_block(result.standard_error or "None"),
                 "",
                 f"- Exit code: `{result.exit_code}`",
+            ]
+        )
+        if result.case.expected_data is not None:
+            lines.extend(
+                [
+                    "",
+                    "### Actual data file",
+                    "",
+                    *markdown_block(result.actual_data or "Missing"),
+                    "",
+                    "### Expected data file",
+                    "",
+                    *markdown_block(result.case.expected_data),
+                ]
+            )
+        lines.extend(
+            [
                 "",
                 "### Expected output",
                 "",
@@ -267,11 +325,29 @@ def print_case(result: TestResult) -> None:
     if result.standard_error:
         print("STANDARD ERROR")
         print(result.standard_error, end="")
+    if result.case.expected_data is not None:
+        print("ACTUAL DATA FILE")
+        print(result.actual_data or "Missing")
     print(f"EXIT CODE: {result.exit_code}")
     print(f"RESULT: {'PASS' if result.passed else 'FAIL'}")
     if not result.passed:
         print("EXPECTED OUTPUT")
         print(result.case.expected_output, end="")
+        if result.case.expected_data is not None:
+            print("EXPECTED DATA FILE")
+            print(result.case.expected_data)
+
+
+def result_difference(result: TestResult) -> str:
+    """Describe whether output, saved data, or process status caused failure."""
+
+    if result.actual_output != result.case.expected_output:
+        return first_difference(result.case.expected_output, result.actual_output)
+    if result.actual_data != result.case.expected_data:
+        return "Saved data file differs from the expected contents."
+    if result.standard_error:
+        return "The program wrote unexpected text to standard error."
+    return f"The program exited with code {result.exit_code}."
 
 
 def main() -> int:
@@ -323,27 +399,46 @@ def main() -> int:
 
     results: list[TestResult] = []
     for case in cases:
-        process = subprocess.run(
-            [str(java), "-cp", str(OUTPUT_DIRECTORY), "Ari"],
-            cwd=REPOSITORY,
-            input=case.input_text + "\n",
-            text=True,
-            capture_output=True,
-            encoding="utf-8",
-            errors="replace",
-        )
+        with tempfile.TemporaryDirectory(prefix="ari-ui-test-") as test_directory:
+            test_path = Path(test_directory)
+            data_path = test_path / "data" / "ari.txt"
+            if case.initial_data is not None:
+                data_path.parent.mkdir(parents=True)
+                data_path.write_text(
+                    case.initial_data + "\n", encoding="utf-8", newline="\n"
+                )
+
+            process = subprocess.run(
+                [str(java), "-cp", str(OUTPUT_DIRECTORY), "Ari"],
+                cwd=test_path,
+                input=case.input_text + "\n",
+                text=True,
+                capture_output=True,
+                encoding="utf-8",
+                errors="replace",
+            )
+            actual_data = (
+                normalize_newlines(data_path.read_text(encoding="utf-8")).rstrip("\n")
+                if data_path.is_file()
+                else None
+            )
         actual_output = normalize_newlines(process.stdout)
         standard_error = normalize_newlines(process.stderr)
+        data_matches = (
+            case.expected_data is None or actual_data == case.expected_data
+        )
         passed = (
             process.returncode == 0
             and not standard_error
             and actual_output == case.expected_output
+            and data_matches
         )
         result = TestResult(
             case=case,
             actual_output=actual_output,
             standard_error=standard_error,
             exit_code=process.returncode,
+            actual_data=actual_data,
             passed=passed,
         )
         results.append(result)

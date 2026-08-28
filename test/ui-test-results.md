@@ -1,10 +1,10 @@
 # Latest Console UI Test Results
 
-- Run at: 2026-08-21T15:37:56+08:00
+- Run at: 2026-08-28T17:00:57+08:00
 - Java: openjdk version "25.0.4" 2026-07-21 LTS
 - Compilation: PASS
-- Test cases run: 12
-- Passed: 12
+- Test cases run: 14
+- Passed: 14
 - Failed: 0
 
 ## Results in execution order
@@ -12,6 +12,8 @@
 | Test case | Result |
 | --- | --- |
 | TC-001 — Unknown command and empty task list | PASS |
+| TC-013 — Reload every task type and completion state | PASS |
+| TC-014 — Reject corrupt saved data atomically | PASS |
 | TC-011 — Preserve a multiword deadline string | PASS |
 | TC-012 — Accept date-only event strings | PASS |
 | TC-002 — Todo task lifecycle | PASS |
