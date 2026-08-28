@@ -26,11 +26,6 @@ public class Ari {
         System.out.println(s);
     }
 
-    public static int getIdx(String s) {
-        String result = s.strip().split("\\s+")[1];
-        return Integer.parseInt(result);
-    }
-
     public static void main(String[] args) {
         // Initialize the scanner
         Scanner scanner = new Scanner(System.in);
@@ -48,7 +43,7 @@ public class Ari {
         // Input loop
         while (true) {
             String input = scanner.nextLine();
-            CommandType command = CommandType.of(input);
+            CommandType command = Parser.parseCommandType(input);
 
             // Save the modified data to the specified path and exit the program
             if (command.equals(CommandType.EXIT) || command.equals(CommandType.BYE)) {
@@ -66,7 +61,7 @@ public class Ari {
 
                     case MARK:
                     case UNMARK:
-                        int idx = getIdx(input);
+                        int idx = Parser.parseTaskId(input);
                         String changedTask = (command.equals(CommandType.MARK))
                                 ? taskArr.markTask(idx)
                                 : taskArr.unmarkTask(idx);
@@ -81,46 +76,22 @@ public class Ari {
                         break;
 
                     case TODO:
-                        Task todoTask = new TodoTask(input);
-                        taskArr.addTask(todoTask);
-                        print(String.format(
-                                "____________________________________________________________\n" +
-                                        "%s\n %s\n%s\n" +
-                                        "____________________________________________________________\n",
-                                command.getDescription(),
-                                todoTask,
-                                taskArr.getLengthText()
-                        ));
-                        break;
-
                     case DEADLINE:
-                        Task deadlineTask = new DeadlineTask(input);
-                        taskArr.addTask(deadlineTask);
-                        print(String.format(
-                                "____________________________________________________________\n" +
-                                        "%s\n %s\n%s\n" +
-                                        "____________________________________________________________\n",
-                                command.getDescription(),
-                                deadlineTask,
-                                taskArr.getLengthText()
-                        ));
-                        break;
-
                     case EVENT:
-                        Task eventTask = new EventTask(input);
-                        taskArr.addTask(eventTask);
+                        Task addedTask = Parser.parseTask(input, command);
+                        taskArr.addTask(addedTask);
                         print(String.format(
                                 "____________________________________________________________\n" +
                                         "%s\n %s\n%s\n" +
                                         "____________________________________________________________\n",
                                 command.getDescription(),
-                                eventTask,
+                                addedTask,
                                 taskArr.getLengthText()
                         ));
                         break;
 
                     case DELETE:
-                        int taskId = getIdx(input);
+                        int taskId = Parser.parseTaskId(input);
                         String startingText = command.getDescription();
                         String middleText = taskArr.deleteTask(taskId);
                         String endingText = taskArr.getLengthText();

@@ -1,26 +1,25 @@
 import java.io.IOException;
-
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Initializes the data file and handles task persistence.
+ */
 public class Storage {
-    private static Path filePath = Path.of("data", "ari.txt");
+    private static final Path FILE_PATH = Path.of("data", "ari.txt");
 
     /**
-     * Creates the directory and file from
-     * the specified file path if they
-     * don't already exist
+     * Creates the data directory and file when they do not already exist.
      */
     public static void start() {
         try {
-            Files.createDirectories(filePath.getParent());
+            Files.createDirectories(FILE_PATH.getParent());
 
-            if (Files.notExists(filePath)) {
-                Files.createFile(filePath);
+            if (Files.notExists(FILE_PATH)) {
+                Files.createFile(FILE_PATH);
             }
         } catch (IOException e) {
             System.out.println(
@@ -31,73 +30,49 @@ public class Storage {
     }
 
     /**
-     * Loads the saved data from the specified file path
+     * Loads all valid saved tasks into the specified task list.
      *
-     * @param taskArray
+     * @param taskArray Task list into which saved tasks are loaded.
      */
     public static void loadInto(TaskArray taskArray) {
         try {
-            if (Files.notExists(filePath)) {
+            if (Files.notExists(FILE_PATH)) {
                 System.out.println("There are no saved tasks yet!");
+                return;
             }
 
-            List<String> lines = Files
-                    .readAllLines(
-                            filePath,
-                            StandardCharsets.UTF_8
-                    );
+            List<String> lines = Files.readAllLines(FILE_PATH, StandardCharsets.UTF_8);
+            List<Task> loadedTasks = new ArrayList<>();
 
             for (String line : lines) {
-                String[] parts = line.split("\\s*\\|\\s*", 3);
-
-                String type = parts[0];
-                String status = parts[1];
-                String taskData = parts[2];
-
-                Task task;
-                switch (type) {
-                    case "D":
-                        task = new DeadlineTask(taskData);
-                        break;
-                    case "E":
-                        task = new EventTask(taskData);
-                        break;
-                    default:
-                        task = new TodoTask(taskData);
-                        break;
+                if (!line.isBlank()) {
+                    loadedTasks.add(Parser.parseStoredTask(line));
                 }
+            }
 
-                if (status.equals("1")) {
-                    task.markTask();
-                } else if (!status.equals("0")) {
-                    throw new IllegalArgumentException("Invalid task status: " + status);
-                }
-
+            for (Task task : loadedTasks) {
                 taskArray.addTask(task);
             }
-        } catch (IOException e) {
+            System.out.println("All tasks were loaded!");
+        } catch (IOException | IllegalArgumentException e) {
             System.out.println("Sorry, I couldn't load your tasks: " + e.getMessage());
-        } catch (EmptyArgumentException e) {
-            System.out.println("Sorry, there's something wrong with your task: " + e.getMessage());
         }
-
-        System.out.println("All tasks were loaded!");
     }
 
     /**
-     * Saves the new task array to the specified file path
+     * Saves all tasks from the specified task list to the data file.
      *
-     * @param taskArray
+     * @param taskArray Task list to save.
      */
     public static void saveFrom(TaskArray taskArray) {
-        ArrayList<String> lines = new ArrayList<>();
+        List<String> lines = new ArrayList<>();
 
         for (Task task : taskArray.getAllTasks()) {
             String line = task.toDataString();
             lines.add(line);
         }
         try {
-            Files.write(filePath, lines, StandardCharsets.UTF_8);
+            Files.write(FILE_PATH, lines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             System.out.println("Sorry, I couldn't save your tasks: " + e.getMessage());
             return;

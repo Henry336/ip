@@ -2,13 +2,13 @@
 
 ## Test environment
 
-- Working directory: repository root
+- Working directory: a fresh temporary directory for each test case
 - Required Java version: JDK 25
 - Test command: `python test/run_ui_tests.py`
 - Compile command: `javac -d out src/main/java/*.java`
 - Run command: `java -cp out Ari`
-- Session isolation: start a fresh program process for each test case
-- Comparison: normalize CRLF/LF line endings, then compare the complete output exactly
+- Session isolation: start a fresh process with an independent `data/ari.txt`
+- Comparison: normalize CRLF/LF line endings, then compare complete output and any expected data file exactly
 - Failure policy: record each failure and continue running all remaining independent cases
 
 ## Test case format
@@ -20,6 +20,8 @@ Each test case must use the following structure:
 3. A **Preconditions** section, or `None` when no setup is required.
 4. An **Input** section containing the ordered console commands in a fenced `text` block.
 5. An **Expected output** section containing the complete console output in a fenced `text` block, including startup and shutdown output.
+6. An optional **Initial data file** section for cases that begin with saved tasks.
+7. An optional **Expected data file** section for cases that verify saved contents.
 
 ## Recorded test cases
 
@@ -66,11 +68,142 @@ list     | list                                  | Lists all your tasks in the o
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
+All tasks were loaded!
 Sorry, I didn't get that... Could you say something else? ^.^
 Here are the tasks on your list:
 You currently have no tasks remaining. Good job!
-Yippie! I've finished saving your tasks!
+I've saved your tasks.
 Bye Bye. See you again!
+```
+
+## TC-013 — Reload every task type and completion state
+
+### Aim
+
+Verify that todo, deadline, and event tasks are reconstructed from storage without losing their fields or completion states.
+
+### Preconditions
+
+Start with the saved task records specified below.
+
+### Initial data file
+
+```text
+T | 1 | read book
+D | 0 | submit report | Friday 5pm
+E | 1 | project meeting | Monday 2pm | Monday 4pm
+```
+
+### Input
+
+```text
+list
+bye
+```
+
+### Expected output
+
+```text
+   ----   
+  / /\ \ 
+ / /__\ \ 
+/ /    \ \ 
+
+Hola, I'm Ari!
+Need any help?
+
+Here is a list of supported commands:
+
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
+
+All tasks were loaded!
+Here are the tasks on your list:
+1. [T][X] read book
+2. [D][ ] submit report (by: Friday 5pm)
+3. [E][X] project meeting (from: Monday 2pm to: Monday 4pm)
+
+I've saved your tasks.
+Bye Bye. See you again!
+```
+
+### Expected data file
+
+```text
+T | 1 | read book
+D | 0 | submit report | Friday 5pm
+E | 1 | project meeting | Monday 2pm | Monday 4pm
+```
+
+## TC-014 — Reject corrupt saved data atomically
+
+### Aim
+
+Verify that an invalid saved status is reported without crashing, claiming success, or partially loading earlier records.
+
+### Preconditions
+
+Start with one valid record followed by a record containing an invalid status.
+
+### Initial data file
+
+```text
+T | 0 | should not load
+D | 2 | invalid status | Sunday
+```
+
+### Input
+
+```text
+list
+bye
+```
+
+### Expected output
+
+```text
+   ----   
+  / /\ \ 
+ / /__\ \ 
+/ /    \ \ 
+
+Hola, I'm Ari!
+Need any help?
+
+Here is a list of supported commands:
+
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
+
+Sorry, I couldn't load your tasks: Invalid saved task status: 2
+Here are the tasks on your list:
+You currently have no tasks remaining. Good job!
+I've saved your tasks.
+Bye Bye. See you again!
+```
+
+### Expected data file
+
+```text
+
 ```
 
 ## TC-011 — Preserve a multiword deadline string
@@ -116,6 +249,7 @@ list     | list                                  | Lists all your tasks in the o
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
+All tasks were loaded!
 ____________________________________________________________
 Gotcha. I've added this task for you:
  [D][ ] do homework (by: no idea :-p)
@@ -125,7 +259,7 @@ ____________________________________________________________
 Here are the tasks on your list:
 1. [D][ ] do homework (by: no idea :-p)
 
-Yippie! I've finished saving your tasks!
+I've saved your tasks.
 Bye Bye. See you again!
 ```
 
@@ -172,6 +306,7 @@ list     | list                                  | Lists all your tasks in the o
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
+All tasks were loaded!
 ____________________________________________________________
 Gotcha. I've added this task for you:
  [E][ ] orientation week (from: 4/10/2019 to: 11/10/2019)
@@ -181,7 +316,7 @@ ____________________________________________________________
 Here are the tasks on your list:
 1. [E][ ] orientation week (from: 4/10/2019 to: 11/10/2019)
 
-Yippie! I've finished saving your tasks!
+I've saved your tasks.
 Bye Bye. See you again!
 ```
 
@@ -230,6 +365,7 @@ list     | list                                  | Lists all your tasks in the o
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
+All tasks were loaded!
 ____________________________________________________________
 Gotcha. I've added this task for you:
  [T][ ] read book
@@ -249,8 +385,14 @@ Gotcha, I've unmarked this task:
  [T][ ] read book
 ____________________________________________________________
 
-Yippie! I've finished saving your tasks!
+I've saved your tasks.
 Bye Bye. See you again!
+```
+
+### Expected data file
+
+```text
+T | 0 | read book
 ```
 
 ## TC-003 — Deadline and event formatting
@@ -297,6 +439,7 @@ list     | list                                  | Lists all your tasks in the o
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
+All tasks were loaded!
 ____________________________________________________________
 Gotcha. I've added this task for you:
  [D][ ] return book (by: Sunday)
@@ -313,8 +456,15 @@ Here are the tasks on your list:
 1. [D][ ] return book (by: Sunday)
 2. [E][ ] project meeting (from: Monday 2pm to: 4pm)
 
-Yippie! I've finished saving your tasks!
+I've saved your tasks.
 Bye Bye. See you again!
+```
+
+### Expected data file
+
+```text
+D | 0 | return book | Sunday
+E | 0 | project meeting | Monday 2pm | 4pm
 ```
 
 ## TC-004 — Reject task ID zero
@@ -359,9 +509,10 @@ list     | list                                  | Lists all your tasks in the o
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
+All tasks were loaded!
 Task 0 does not exist!
 Send 'list' to see which tasks you have left!
-Yippie! I've finished saving your tasks!
+I've saved your tasks.
 Bye Bye. See you again!
 ```
 
@@ -409,6 +560,7 @@ list     | list                                  | Lists all your tasks in the o
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
+All tasks were loaded!
 ____________________________________________________________
 Gotcha. I've added this task for you:
  [T][ ] read book
@@ -427,7 +579,7 @@ Fortunately, there was nothing to delete.
 Good job! Keep this up!
 ____________________________________________________________
 
-Yippie! I've finished saving your tasks!
+I've saved your tasks.
 Bye Bye. See you again!
 ```
 
@@ -477,13 +629,14 @@ list     | list                                  | Lists all your tasks in the o
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
+All tasks were loaded!
 Oh no! You can't have an empty description for todos
 Oh no! You can't have an empty description for deadlines
 Oh no! You can't have an empty description for events
 Oops! You can only enter integer IDs. Try again!
 Task 1 does not exist!
 Send 'list' to see which tasks you have left!
-Yippie! I've finished saving your tasks!
+I've saved your tasks.
 Bye Bye. See you again!
 ```
 
@@ -533,6 +686,7 @@ list     | list                                  | Lists all your tasks in the o
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
+All tasks were loaded!
 ____________________________________________________________
 Gotcha. I've added this task for you:
  [T][ ] keep me
@@ -548,7 +702,7 @@ Send 'list' to see which tasks you have left!
 Here are the tasks on your list:
 1. [T][ ] keep me
 
-Yippie! I've finished saving your tasks!
+I've saved your tasks.
 Bye Bye. See you again!
 ```
 
@@ -594,13 +748,14 @@ list     | list                                  | Lists all your tasks in the o
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
+All tasks were loaded!
 ____________________________________________________________
 Fortunately, there was nothing to delete.
  Because you've completed all your tasks!
 Good job! Keep this up!
 ____________________________________________________________
 
-Yippie! I've finished saving your tasks!
+I've saved your tasks.
 Bye Bye. See you again!
 ```
 
@@ -650,6 +805,7 @@ list     | list                                  | Lists all your tasks in the o
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
+All tasks were loaded!
 ____________________________________________________________
 Gotcha. I've added this task for you:
  [T][ ] first
@@ -676,7 +832,7 @@ Good job! I've marked this task as done:
  [T][X] second
 ____________________________________________________________
 
-Yippie! I've finished saving your tasks!
+I've saved your tasks.
 Bye Bye. See you again!
 ```
 
@@ -723,6 +879,7 @@ list     | list                                  | Lists all your tasks in the o
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
+All tasks were loaded!
 ____________________________________________________________
 Gotcha. I've added this task for you:
  [T][ ] spaced task
@@ -732,6 +889,6 @@ ____________________________________________________________
 Here are the tasks on your list:
 1. [T][ ] spaced task
 
-Yippie! I've finished saving your tasks!
+I've saved your tasks.
 Bye Bye. See you again!
 ```

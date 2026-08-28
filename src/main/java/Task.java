@@ -1,21 +1,15 @@
-public class Task {
-    protected String description;
+/**
+ * Defines state and behavior shared by all task types.
+ */
+public abstract class Task {
+    protected final String description;
     protected boolean isDone;
-    protected String type;
+    protected final String type;
 
-    public Task(String rawDescription, String type) {
-        String[] descArr = rawDescription.split(" ");
-        String desc = "";
-
-        int idx = 1;
-        while (idx < descArr.length) {
-            desc += descArr[idx] + " ";
-            idx += 1;
-        }
-
-        this.description = desc.strip();
+    protected Task(String description, String type) {
+        this.description = requireNonBlank(description, "Task description");
         this.isDone = false;
-        this.type = type;
+        this.type = requireNonBlank(type, "Task type");
     }
 
     public void changeState() {
@@ -28,6 +22,20 @@ public class Task {
 
     public void unmarkTask() {
         this.isDone = false;
+    }
+
+    /**
+     * Validates and returns a required task field.
+     *
+     * @param value Field value to validate.
+     * @param fieldName Field name used in the validation message.
+     * @return The validated value.
+     */
+    protected static String requireNonBlank(String value, String fieldName) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(fieldName + " cannot be empty");
+        }
+        return value;
     }
 
     public String toDataString() {

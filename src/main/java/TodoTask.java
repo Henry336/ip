@@ -3,22 +3,13 @@
  */
 public class TodoTask extends Task {
     /**
-     * Creates a todo task from a todo command.
+     * Creates an incomplete todo task.
      *
-     * @param command Full todo command entered by the user.
-     * @throws EmptyArgumentException If the todo description is empty.
+     * @param description Todo description.
      */
-    public TodoTask(String command) throws EmptyArgumentException {
-        super(validateCommand(command), "T");
+    public TodoTask(String description) {
+        super(description, "T");
     }
 
-    private static String validateCommand(String command) throws EmptyArgumentException {
-        String[] commandParts = command.strip().split("\\s+", 2);
-        if (commandParts.length < 2 || commandParts[1].isBlank()) {
-            throw new EmptyArgumentException("todo");
-        }
-
-        return command.strip();
-    }
 }
 
