@@ -375,7 +375,7 @@ def main() -> int:
     print("JDK VERSION")
     print(java_version, end="")
 
-    sources = sorted(str(path) for path in SOURCE_DIRECTORY.glob("*.java"))
+    sources = sorted(str(path) for path in SOURCE_DIRECTORY.rglob("*.java"))
     compile_result = subprocess.run(
         [str(javac), "-d", str(OUTPUT_DIRECTORY), *sources],
         cwd=REPOSITORY,
@@ -388,7 +388,7 @@ def main() -> int:
         compile_result.stdout + compile_result.stderr
     )
     print("COMPILE")
-    print(f"$ {javac} -d out src/main/java/*.java")
+    print(f"$ {javac} -d out <all Java files under src/main/java>")
     if compile_output:
         print(compile_output, end="")
     if compile_result.returncode != 0:
@@ -409,7 +409,7 @@ def main() -> int:
                 )
 
             process = subprocess.run(
-                [str(java), "-cp", str(OUTPUT_DIRECTORY), "Ari"],
+                [str(java), "-cp", str(OUTPUT_DIRECTORY), "ari.Ari"],
                 cwd=test_path,
                 input=case.input_text + "\n",
                 text=True,

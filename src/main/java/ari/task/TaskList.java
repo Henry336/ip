@@ -1,5 +1,9 @@
+package ari.task;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import ari.exception.TaskNotFoundException;
 
 /**
  * Stores and manages the user's tasks.

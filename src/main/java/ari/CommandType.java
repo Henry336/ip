@@ -1,3 +1,5 @@
+package ari;
+
 public enum CommandType {
     MARK("Good job! I've marked this task as done:"),
     UNMARK("Gotcha, I've unmarked this task:"),

@@ -1,3 +1,7 @@
+package ari.task;
+
+import ari.Parser;
+
 /**
  * Represents a task that takes place between a start and end time.
  */
