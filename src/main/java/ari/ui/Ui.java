@@ -25,6 +25,8 @@ public class Ui {
                     + "event    | event <event> /from <time> /to <time> | "
                     + "Adds an event with 'from' and 'to' times. "
                     + "(e.g., event dinner party /from Monday 2pm /to 9pm)\n"
+                    + "find     | find <keyword>                        | "
+                    + "Finds tasks containing a keyword. (e.g., find book)\n"
                     + "mark     | mark <task ID>                        | "
                     + "Marks the task with the task ID as done! (e.g., mark 1)\n"
                     + "unmark   | unmark <task ID>                      | "

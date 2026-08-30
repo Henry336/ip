@@ -2,6 +2,7 @@ package ari.task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import ari.exception.TaskNotFoundException;
 
@@ -55,6 +56,26 @@ public class TaskList {
         this.tasks.remove(id - 1);
 
         return deletedTask.toString();
+    }
+
+    /**
+     * Returns the tasks whose descriptions contain the specified keyword.
+     *
+     * @param keyword Text to search for in task descriptions.
+     * @return New task list containing the matching tasks in their original order.
+     */
+    public TaskList findMatchingTasks(String keyword) {
+        TaskList matchingTasks = new TaskList();
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+
+        for (Task task : this.tasks) {
+            String normalizedDescription = task.description.toLowerCase(Locale.ROOT);
+            if (normalizedDescription.contains(normalizedKeyword)) {
+                matchingTasks.addTask(task);
+            }
+        }
+
+        return matchingTasks;
     }
 
     public List<Task> getAllTasks() {

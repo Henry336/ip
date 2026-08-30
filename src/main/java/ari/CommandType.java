@@ -11,7 +11,8 @@ public enum CommandType {
     UNKNOWN("Error"),
     DEADLINE("Gotcha. I've added this task for you:"),
     EVENT("Gotcha. I've added this task for you:"),
-    DELETE("Done! I've removed the task for you:");
+    DELETE("Done! I've removed the task for you:"),
+    FIND("Here are the matching tasks in your list:");
 
     private final String description;
 

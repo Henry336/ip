@@ -52,6 +52,20 @@ public class Ari {
                         this.ui.showMessage(this.tasks.toString());
                         break;
 
+                    case FIND:
+                        String keyword = Parser.parseFindKeyword(input);
+                        TaskList matchingTasks = this.tasks.findMatchingTasks(keyword);
+                        String matchingTasksText = (matchingTasks.getLength() == 0)
+                                ? "No matching tasks found."
+                                : matchingTasks.toString().stripTrailing();
+
+                        this.ui.showMessageWithLines(String.format(
+                                "%s\n%s",
+                                command.getDescription(),
+                                matchingTasksText
+                        ));
+                        break;
+
                     case MARK:
                     case UNMARK:
                         int index = Parser.parseTaskId(input);
