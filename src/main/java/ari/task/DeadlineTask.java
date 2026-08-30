@@ -19,10 +19,20 @@ public class DeadlineTask extends Task {
         this.deadline = Parser.parseDateTime(deadline);
     }
 
+    /**
+     * Returns the deadline associated with this task.
+     *
+     * @return Deadline text.
+     */
     public String getDeadline() {
         return this.deadline;
     }
 
+    /**
+     * Returns this deadline task as a storage record.
+     *
+     * @return Storage representation of this deadline task.
+     */
     @Override
     public String toDataString() {
         String status = this.isDone
@@ -38,6 +48,11 @@ public class DeadlineTask extends Task {
         );
     }
 
+    /**
+     * Returns this deadline task in a user-readable format.
+     *
+     * @return User-readable representation of this deadline task.
+     */
     @Override
     public String toString() {
         String box;

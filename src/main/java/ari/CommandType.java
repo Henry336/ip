@@ -1,5 +1,8 @@
 package ari;
 
+/**
+ * Represents a command that Ari recognizes and its corresponding response.
+ */
 public enum CommandType {
     MARK("Good job! I've marked this task as done:"),
     UNMARK("Gotcha, I've unmarked this task:"),
@@ -16,22 +19,20 @@ public enum CommandType {
     private final String description;
 
     /**
-     * The following is an implicitly private constructor
-     * for each command type (MARK, UNMARK, EXIT, etc.)
+     * Creates a command type with the response shown when it is handled.
      *
-     * Added so that I can set each one's text message easily
-     * @param description
+     * @param description Response associated with the command.
      */
     CommandType(String description) {
         this.description = description;
     }
 
     /**
-     * Regular method for each command type
-     * @return command's description of type String
+     * Returns the response associated with this command.
+     *
+     * @return Response associated with this command.
      */
     public String getDescription() {
         return this.description;
     }
-
 }
