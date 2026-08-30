@@ -117,6 +117,9 @@ public class Ari {
         this.ui.close();
     }
 
+    /**
+     * Loads saved tasks and reports storage errors to the user.
+     */
     private void loadTasks() {
         try {
             this.storage.start();
@@ -136,6 +139,9 @@ public class Ari {
         }
     }
 
+    /**
+     * Saves the current tasks and reports storage errors to the user.
+     */
     private void saveTasks() {
         try {
             this.storage.saveFrom(this.tasks);

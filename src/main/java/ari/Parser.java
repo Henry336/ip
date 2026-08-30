@@ -120,6 +120,13 @@ public class Parser {
         return task;
     }
 
+    /**
+     * Returns the description from a todo command.
+     *
+     * @param input Raw todo command.
+     * @return Todo description.
+     * @throws EmptyArgumentException If the todo description is empty.
+     */
     private static String parseTodoDescription(String input) throws EmptyArgumentException {
         String[] commandParts = input.strip().split("\\s+", 2);
         if (commandParts.length < 2 || commandParts[1].isBlank()) {
@@ -128,6 +135,13 @@ public class Parser {
         return commandParts[1].strip();
     }
 
+    /**
+     * Returns the deadline task represented by a command.
+     *
+     * @param input Raw deadline command.
+     * @return Deadline task represented by the command.
+     * @throws EmptyArgumentException If the description or deadline is empty.
+     */
     private static DeadlineTask parseDeadlineTask(String input)
             throws EmptyArgumentException {
         String[] commandParts = input.strip().split("\\s+/by\\s+", 2);
@@ -145,6 +159,13 @@ public class Parser {
         );
     }
 
+    /**
+     * Returns the event task represented by a command.
+     *
+     * @param input Raw event command.
+     * @return Event task represented by the command.
+     * @throws EmptyArgumentException If the description, start time, or end time is empty.
+     */
     private static EventTask parseEventTask(String input) throws EmptyArgumentException {
         String[] commandParts = input.strip().split("\\s+/from\\s+", 2);
         if (commandParts.length < 2) {
@@ -169,11 +190,10 @@ public class Parser {
     }
 
     /**
-     * Converts input string to a datetime string if possible,
-     * otherwise, return original string
+     * Returns a formatted date when the input uses ISO format, or the original input otherwise.
      *
-     * @param s
-     * @return Respective datetime string or input string
+     * @param s Date or free-form date and time text.
+     * @return Formatted date or the original input.
      */
     public static String parseDateTime(String s) {
         try {
