@@ -88,4 +88,25 @@ public class ParserTest {
             assertEquals("Command does not create a task", e.getMessage());
         }
     }
+
+    @Test
+    public void parseFindKeyword_repeatedWhitespace_returnsEntireKeyword()
+            throws EmptyArgumentException {
+        String keyword = Parser.parseFindKeyword("  find    read book  ");
+
+        assertEquals("read book", keyword);
+    }
+
+    @Test
+    public void parseFindKeyword_missingKeyword_throwsEmptyArgumentException() {
+        try {
+            Parser.parseFindKeyword("find   ");
+            fail();
+        } catch (EmptyArgumentException e) {
+            assertEquals(
+                    "Oh no! You can't have an empty description for finding tasks",
+                    e.getMessage()
+            );
+        }
+    }
 }

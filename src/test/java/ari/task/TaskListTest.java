@@ -49,6 +49,31 @@ public class TaskListTest {
         assertMarkTaskFails(tasks, 1);
     }
 
+    @Test
+    public void findMatchingTasks_mixedCaseKeyword_returnsMatchesInOriginalOrder() {
+        TaskList tasks = new TaskList();
+        tasks.addTask(new TodoTask("read book"));
+        tasks.addTask(new DeadlineTask("return BOOK", "Sunday"));
+        tasks.addTask(new TodoTask("write code"));
+
+        TaskList matches = tasks.findMatchingTasks("Book");
+
+        assertEquals(2, matches.getLength());
+        assertEquals("[T][ ] read book", matches.getTask(0).toString());
+        assertEquals("[D][ ] return BOOK (by: Sunday)", matches.getTask(1).toString());
+    }
+
+    @Test
+    public void findMatchingTasks_noMatch_returnsEmptyMutableTaskList() {
+        TaskList tasks = createListWithOneTask();
+
+        TaskList matches = tasks.findMatchingTasks("missing");
+        matches.addTask(new TodoTask("later addition"));
+
+        assertEquals(1, matches.getLength());
+        assertEquals("[T][ ] later addition", matches.getTask(0).toString());
+    }
+
     private TaskList createListWithOneTask() {
         TaskList tasks = new TaskList();
         tasks.addTask(new TodoTask("only task"));

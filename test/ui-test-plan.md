@@ -61,6 +61,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
@@ -74,6 +75,104 @@ Here are the tasks on your list:
 You currently have no tasks remaining. Good job!
 I've saved your tasks.
 Bye Bye. See you again!
+```
+
+## TC-015 — Find tasks by keyword
+
+### Aim
+
+Verify that `find` searches descriptions case-insensitively, accepts repeated whitespace and multiword
+keywords, preserves task order, reports no matches clearly, and rejects a missing keyword.
+
+### Preconditions
+
+None. Start with a fresh program process.
+
+### Input
+
+```text
+todo read book
+deadline return BOOK /by Sunday
+todo write code
+find    book
+find read book
+find missing
+find
+bye
+```
+
+### Expected output
+
+```text
+   ----   
+  / /\ \ 
+ / /__\ \ 
+/ /    \ \ 
+
+Hola, I'm Ari!
+Need any help?
+
+Here is a list of supported commands:
+
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
+
+All tasks were loaded!
+____________________________________________________________
+Gotcha. I've added this task for you:
+ [T][ ] read book
+You currently have 1 task in the list! Better get working...
+____________________________________________________________
+
+____________________________________________________________
+Gotcha. I've added this task for you:
+ [D][ ] return BOOK (by: Sunday)
+You currently have 2 tasks in the list! Better get working...
+____________________________________________________________
+
+____________________________________________________________
+Gotcha. I've added this task for you:
+ [T][ ] write code
+You currently have 3 tasks in the list! Better get working...
+____________________________________________________________
+
+____________________________________________________________
+Here are the matching tasks in your list:
+1. [T][ ] read book
+2. [D][ ] return BOOK (by: Sunday)
+____________________________________________________________
+
+____________________________________________________________
+Here are the matching tasks in your list:
+1. [T][ ] read book
+____________________________________________________________
+
+____________________________________________________________
+Here are the matching tasks in your list:
+No matching tasks found.
+____________________________________________________________
+
+Oh no! You can't have an empty description for finding tasks
+I've saved your tasks.
+Bye Bye. See you again!
+```
+
+### Expected data file
+
+```text
+T | 0 | read book
+D | 0 | return BOOK | Sunday
+T | 0 | write code
 ```
 
 ## TC-013 — Reload every task type and completion state
@@ -119,6 +218,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
@@ -186,6 +286,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
@@ -242,6 +343,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
@@ -299,6 +401,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
@@ -358,6 +461,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
@@ -432,6 +536,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
@@ -502,6 +607,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
@@ -553,6 +659,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
@@ -622,6 +729,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
@@ -679,6 +787,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
@@ -741,6 +850,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
@@ -798,6 +908,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
@@ -872,6 +983,7 @@ Keyword  |                 Format                | Description
 todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
 deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
 event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)

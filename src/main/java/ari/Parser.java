@@ -54,7 +54,22 @@ public class Parser {
                 return parseEventTask(input);
             default:
                 throw new IllegalArgumentException("Command does not create a task");
-            }
+        }
+    }
+
+    /**
+     * Extracts the search keyword from a find command.
+     *
+     * @param input Raw find command.
+     * @return Search keyword, with surrounding whitespace removed.
+     * @throws EmptyArgumentException If the command has no search keyword.
+     */
+    public static String parseFindKeyword(String input) throws EmptyArgumentException {
+        String[] commandParts = input.strip().split("\\s+", 2);
+        if (commandParts.length < 2 || commandParts[1].isBlank()) {
+            throw new EmptyArgumentException("finding task");
+        }
+        return commandParts[1].strip();
     }
 
     /**

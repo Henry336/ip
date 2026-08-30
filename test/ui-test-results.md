@@ -3,8 +3,8 @@
 - Run at: 2026-08-30T20:48:18+08:00
 - Java: openjdk version "25.0.4" 2026-07-21 LTS
 - Compilation: PASS
-- Test cases run: 14
-- Passed: 14
+- Test cases run: 15
+- Passed: 15
 - Failed: 0
 
 ## Results in execution order
@@ -12,6 +12,7 @@
 | Test case | Result |
 | --- | --- |
 | TC-001 — Unknown command and empty task list | PASS |
+| TC-015 — Find tasks by keyword | PASS |
 | TC-013 — Reload every task type and completion state | PASS |
 | TC-014 — Reject corrupt saved data atomically | PASS |
 | TC-011 — Preserve a multiword deadline string | PASS |
