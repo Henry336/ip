@@ -117,7 +117,7 @@ public class Parser {
                 if (fields.length != 4) {
                     throw new IllegalArgumentException("Invalid saved task: " + line);
                 }
-                task = new DeadlineTask(fields[2], fields[3]);
+                task = createDeadlineTask(fields[2], fields[3]);
                 break;
             case "E":
                 if (fields.length != 5) {
@@ -168,10 +168,26 @@ public class Parser {
         if (descriptionParts.length < 2 || descriptionParts[1].isBlank()) {
             throw new EmptyArgumentException("deadline");
         }
-        return new DeadlineTask(
+        return createDeadlineTask(
                 descriptionParts[1].strip(),
                 commandParts[1].strip()
         );
+    }
+
+    /**
+     * Creates a deadline task containing a date when the deadline uses ISO format.
+     *
+     * @param description Deadline task description.
+     * @param deadlineText Date or free-form deadline text.
+     * @return Deadline task containing the appropriate deadline representation.
+     */
+    private static DeadlineTask createDeadlineTask(String description, String deadlineText) {
+        try {
+            LocalDate deadlineDate = LocalDate.parse(deadlineText);
+            return new DeadlineTask(description, deadlineDate);
+        } catch (DateTimeParseException e) {
+            return new DeadlineTask(description, deadlineText);
+        }
     }
 
     /**

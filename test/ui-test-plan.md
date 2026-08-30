@@ -77,6 +77,70 @@ I've saved your tasks.
 Bye Bye. See you again!
 ```
 
+## TC-016 — Parse and save an ISO deadline date
+
+### Aim
+
+Verify that an ISO deadline is displayed in a readable format and saved in a stable format.
+
+### Preconditions
+
+None. Start with a fresh program process.
+
+### Input
+
+```text
+deadline return book /by 2019-12-02
+list
+bye
+```
+
+### Expected output
+
+```text
+   ----   
+  / /\ \ 
+ / /__\ \ 
+/ /    \ \ 
+
+Hola, I'm Ari!
+Need any help?
+
+Here is a list of supported commands:
+
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
+
+All tasks were loaded!
+____________________________________________________________
+Gotcha. I've added this task for you:
+ [D][ ] return book (by: Dec 2 2019)
+You currently have 1 task in the list! Better get working...
+____________________________________________________________
+
+Here are the tasks on your list:
+1. [D][ ] return book (by: Dec 2 2019)
+
+I've saved your tasks.
+Bye Bye. See you again!
+```
+
+### Expected data file
+
+```text
+D | 0 | return book | 2019-12-02
+```
+
 ## TC-015 — Find tasks by keyword
 
 ### Aim
@@ -189,7 +253,7 @@ Start with the saved task records specified below.
 
 ```text
 T | 1 | read book
-D | 0 | submit report | Friday 5pm
+D | 0 | submit report | 2026-08-31
 E | 1 | project meeting | Monday 2pm | Monday 4pm
 ```
 
@@ -229,7 +293,7 @@ bye      | bye                                   | Serves the same purpose as 'e
 All tasks were loaded!
 Here are the tasks on your list:
 1. [T][X] read book
-2. [D][ ] submit report (by: Friday 5pm)
+2. [D][ ] submit report (by: Aug 31 2026)
 3. [E][X] project meeting (from: Monday 2pm to: Monday 4pm)
 
 I've saved your tasks.
@@ -240,7 +304,7 @@ Bye Bye. See you again!
 
 ```text
 T | 1 | read book
-D | 0 | submit report | Friday 5pm
+D | 0 | submit report | 2026-08-31
 E | 1 | project meeting | Monday 2pm | Monday 4pm
 ```
 

@@ -27,6 +27,18 @@ public class ParserTest {
     }
 
     @Test
+    public void parseTask_deadlineWithIsoDate_storesAndFormatsDate()
+            throws EmptyArgumentException {
+        Task task = Parser.parseTask(
+                "deadline return book /by 2019-12-02",
+                CommandType.DEADLINE
+        );
+
+        assertEquals("[D][ ] return book (by: Dec 2 2019)", task.toString());
+        assertEquals("D | 0 | return book | 2019-12-02", task.toDataString());
+    }
+
+    @Test
     public void parseTask_eventCommand_returnsEventTask() throws EmptyArgumentException {
         String input = "event project meeting /from Monday 2PM /to Monday 4PM";
 

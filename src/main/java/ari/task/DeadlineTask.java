@@ -1,22 +1,39 @@
 package ari.task;
 
-import ari.Parser;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Represents a task that must be completed by a deadline.
  */
 public class DeadlineTask extends Task {
-    private final String deadline;
+    private static final DateTimeFormatter DISPLAY_DATE_FORMATTER = DateTimeFormatter.ofPattern("MMM d yyyy");
+
+    private final LocalDate deadlineDate;
+    private final String deadlineText;
 
     /**
      * Creates a deadline task from separately parsed fields.
      *
      * @param description Deadline task description.
-     * @param deadline Deadline of the task.
+     * @param deadlineText Free-form deadline of the task.
      */
-    public DeadlineTask(String description, String deadline) {
+    public DeadlineTask(String description, String deadlineText) {
         super(description, "D");
-        this.deadline = Parser.parseDateTime(deadline);
+        this.deadlineDate = null;
+        this.deadlineText = deadlineText;
+    }
+
+    /**
+     * Creates a deadline task with a parsed date.
+     *
+     * @param description Deadline task description.
+     * @param deadlineDate Date by which the task must be completed.
+     */
+    public DeadlineTask(String description, LocalDate deadlineDate) {
+        super(description, "D");
+        this.deadlineDate = deadlineDate;
+        this.deadlineText = null;
     }
 
     /**
@@ -25,7 +42,10 @@ public class DeadlineTask extends Task {
      * @return Deadline text.
      */
     public String getDeadline() {
-        return this.deadline;
+        if (this.deadlineDate != null) {
+            return this.deadlineDate.format(DISPLAY_DATE_FORMATTER);
+        }
+        return this.deadlineText;
     }
 
     /**
@@ -44,7 +64,7 @@ public class DeadlineTask extends Task {
                 this.type,
                 status,
                 this.description,
-                this.deadline
+                this.getStorageDeadline()
         );
     }
 
@@ -65,6 +85,18 @@ public class DeadlineTask extends Task {
 
         return String.format(
                 "[%s]%s %s (by: %s)",
-                this.type, box, this.description, this.deadline);
+                this.type, box, this.description, this.getDeadline());
+    }
+
+    /**
+     * Returns the deadline in the stable format used by storage.
+     *
+     * @return ISO date or unchanged free-form deadline text.
+     */
+    private String getStorageDeadline() {
+        if (this.deadlineDate != null) {
+            return this.deadlineDate.toString();
+        }
+        return this.deadlineText;
     }
 }

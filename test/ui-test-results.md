@@ -1,10 +1,10 @@
 # Latest Console UI Test Results
 
-- Run at: 2026-08-30T20:54:09+08:00
+- Run at: 2026-08-30T21:16:26+08:00
 - Java: openjdk version "25.0.4" 2026-07-21 LTS
 - Compilation: PASS
-- Test cases run: 15
-- Passed: 15
+- Test cases run: 16
+- Passed: 16
 - Failed: 0
 
 ## Results in execution order
@@ -12,6 +12,7 @@
 | Test case | Result |
 | --- | --- |
 | TC-001 — Unknown command and empty task list | PASS |
+| TC-016 — Parse and save an ISO deadline date | PASS |
 | TC-015 — Find tasks by keyword | PASS |
 | TC-013 — Reload every task type and completion state | PASS |
 | TC-014 — Reject corrupt saved data atomically | PASS |
