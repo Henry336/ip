@@ -35,5 +35,4 @@ public enum CommandType {
     public String getDescription() {
         return this.description;
     }
-
 }

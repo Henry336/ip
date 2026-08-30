@@ -14,7 +14,7 @@ import ari.task.TodoTask;
  * Converts raw user input and saved records into domain values.
  */
 public class Parser {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy");
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MMM d yyyy");
 
     /**
      * Identifies the command represented by the user's input.
@@ -192,15 +192,15 @@ public class Parser {
     /**
      * Returns a formatted date when the input uses ISO format, or the original input otherwise.
      *
-     * @param s Date or free-form date and time text.
+     * @param input Date or free-form date and time text.
      * @return Formatted date or the original input.
      */
-    public static String parseDateTime(String s) {
+    public static String parseDateTime(String input) {
         try {
-            LocalDate date = LocalDate.parse(s);
-            return date.format(formatter);
+            LocalDate date = LocalDate.parse(input);
+            return date.format(DATE_FORMATTER);
         } catch (DateTimeParseException e) {
-            return s;
+            return input;
         }
     }
 }

@@ -15,7 +15,7 @@ public class TaskList {
      * Creates an empty task list.
      */
     public TaskList() {
-        tasks = new ArrayList<>();
+        this.tasks = new ArrayList<>();
     }
 
     /**
@@ -30,16 +30,16 @@ public class TaskList {
     /**
      * Marks the task with the specified task ID as completed.
      *
-     * @param id One-based ID of the task to mark.
+     * @param taskId One-based ID of the task to mark.
      * @return User-readable representation of the marked task.
      * @throws TaskNotFoundException If the task ID is not in the list.
      */
-    public String markTask(int id) throws TaskNotFoundException {
-        if (id <= 0 || id - 1 >= this.tasks.size()) {
-            throw new TaskNotFoundException(id);
+    public String markTask(int taskId) throws TaskNotFoundException {
+        if (taskId <= 0 || taskId - 1 >= this.tasks.size()) {
+            throw new TaskNotFoundException(taskId);
         }
 
-        Task task = this.tasks.get(id - 1);
+        Task task = this.tasks.get(taskId - 1);
         task.markTask();
         return task.toString();
     }
@@ -47,16 +47,16 @@ public class TaskList {
     /**
      * Marks the task with the specified task ID as incomplete.
      *
-     * @param id One-based ID of the task to unmark.
+     * @param taskId One-based ID of the task to unmark.
      * @return User-readable representation of the unmarked task.
      * @throws TaskNotFoundException If the task ID is not in the list.
      */
-    public String unmarkTask(int id) throws TaskNotFoundException {
-        if (id <= 0 || id - 1 >= this.tasks.size()) {
-            throw new TaskNotFoundException(id);
+    public String unmarkTask(int taskId) throws TaskNotFoundException {
+        if (taskId <= 0 || taskId - 1 >= this.tasks.size()) {
+            throw new TaskNotFoundException(taskId);
         }
 
-        Task task = this.tasks.get(id - 1);
+        Task task = this.tasks.get(taskId - 1);
         task.unmarkTask();
         return task.toString();
     }
@@ -64,19 +64,20 @@ public class TaskList {
     /**
      * Removes the task with the specified task ID.
      *
-     * @param id One-based ID of the task to delete.
+     * @param taskId One-based ID of the task to delete.
      * @return User-readable representation of the deleted task, or {@code None} if the list is empty.
      * @throws TaskNotFoundException If the list is non-empty and the task ID is not in it.
      */
-    public String deleteTask(int id) throws TaskNotFoundException {
+    public String deleteTask(int taskId) throws TaskNotFoundException {
         if (this.tasks.isEmpty()) {
-            return "None"; // if no tasks remain, then it's fine
-        } else if (id <= 0 || id - 1 >= this.tasks.size()) {
-            throw new TaskNotFoundException(id); // if there is/are task(s), then we must throw an exception
+            return "None";
+        }
+        if (taskId <= 0 || taskId - 1 >= this.tasks.size()) {
+            throw new TaskNotFoundException(taskId);
         }
 
-        Task deletedTask = this.tasks.get(id - 1);
-        this.tasks.remove(id - 1);
+        Task deletedTask = this.tasks.get(taskId - 1);
+        this.tasks.remove(taskId - 1);
 
         return deletedTask.toString();
     }
@@ -93,11 +94,11 @@ public class TaskList {
     /**
      * Returns the task at the specified zero-based index.
      *
-     * @param id Zero-based index of the task.
+     * @param index Zero-based index of the task.
      * @return Task at the specified index.
      */
-    public Task getTask(int id) {
-        return this.tasks.get(id);
+    public Task getTask(int index) {
+        return this.tasks.get(index);
     }
 
     /**
@@ -141,14 +142,14 @@ public class TaskList {
             return this.getLengthText();
         }
 
-        int num = 1;
-        String result = "";
+        int taskNumber = 1;
+        String taskListText = "";
 
         for (Task task : this.tasks) {
-            result += String.format("%s. %s\n", num, task.toString());
-            num += 1;
+            taskListText += String.format("%s. %s\n", taskNumber, task);
+            taskNumber += 1;
         }
 
-        return result;
+        return taskListText;
     }
 }

@@ -38,7 +38,7 @@ public class EventTask extends Task {
      */
     @Override
     public String toDataString() {
-        String status = isDone
+        String status = this.isDone
                 ? "1"
                 : "0";
 
