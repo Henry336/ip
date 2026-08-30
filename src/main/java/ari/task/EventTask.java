@@ -22,10 +22,20 @@ public class EventTask extends Task {
         this.to = Parser.parseDateTime(to);
     }
 
+    /**
+     * Returns the start and end times associated with this event.
+     *
+     * @return Start and end time text, in that order.
+     */
     public String[] getEventTime() {
         return new String[] {this.from, this.to};
     }
 
+    /**
+     * Returns this event task as a storage record.
+     *
+     * @return Storage representation of this event task.
+     */
     @Override
     public String toDataString() {
         String status = isDone
@@ -42,6 +52,11 @@ public class EventTask extends Task {
         );
     }
 
+    /**
+     * Returns this event task in a user-readable format.
+     *
+     * @return User-readable representation of this event task.
+     */
     @Override
     public String toString() {
         String box;

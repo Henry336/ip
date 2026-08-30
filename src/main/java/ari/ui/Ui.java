@@ -40,6 +40,9 @@ public class Ui {
 
     private final Scanner scanner;
 
+    /**
+     * Creates a user interface that reads from standard input.
+     */
     public Ui() {
         this.scanner = new Scanner(System.in);
     }
