@@ -3,9 +3,9 @@ package ari.task;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import ari.exception.TaskNotFoundException;
-
 import org.junit.jupiter.api.Test;
+
+import ari.exception.TaskNotFoundException;
 
 public class TaskListTest {
     @Test

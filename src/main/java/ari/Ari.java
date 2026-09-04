@@ -118,6 +118,9 @@ public class Ari {
                                 "Sorry, I didn't get that... Could you say something else? ^.^"
                         );
                         break;
+
+                    default:
+                        throw new IllegalStateException("Unexpected command: " + command);
                 }
             } catch (EmptyArgumentException e) {
                 this.ui.showMessage(e.getMessage());
