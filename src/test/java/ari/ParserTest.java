@@ -3,10 +3,10 @@ package ari;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import org.junit.jupiter.api.Test;
+
 import ari.exception.EmptyArgumentException;
 import ari.task.Task;
-
-import org.junit.jupiter.api.Test;
 
 public class ParserTest {
     @Test

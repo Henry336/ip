@@ -84,11 +84,6 @@ public class TaskList {
     }
 
     /**
-     * Returns an unmodifiable copy of all tasks in this list.
-     *
-     * @return Copy of all tasks in this list.
-     */
-    /**
      * Returns the tasks whose descriptions contain the specified keyword.
      *
      * @param keyword Text to search for in task descriptions.
@@ -108,6 +103,11 @@ public class TaskList {
         return matchingTasks;
     }
 
+    /**
+     * Returns an unmodifiable copy of all tasks in this list.
+     *
+     * @return Copy of all tasks in this list.
+     */
     public List<Task> getAllTasks() {
         return List.copyOf(this.tasks);
     }
