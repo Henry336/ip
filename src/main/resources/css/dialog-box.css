@@ -1,0 +1,18 @@
+.label {
+    -fx-background-color: #dce5f2;
+    -fx-background-insets: 0;
+    -fx-background-radius: 14px 14px 3px 14px;
+    -fx-font-size: 14px;
+    -fx-line-spacing: 2px;
+    -fx-padding: 10px 13px;
+    -fx-text-fill: #1f2a44;
+}
+
+.ari-reply {
+    -fx-background-color: #d8f1ed;
+    -fx-background-radius: 14px 14px 14px 3px;
+}
+
+#displayPicture {
+    -fx-effect: dropshadow(gaussian, rgba(31, 42, 68, 0.20), 8, 0.2, 0, 2);
+}

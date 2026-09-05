@@ -1,8 +1,8 @@
 """Run the console UI cases recorded in test/ui-test-plan.md.
 
 The runner uses only Python's standard library. It compiles the Java sources with
-JDK 25, executes every test case in a fresh process, compares complete console
-output, and replaces test/ui-test-results.md with the latest results.
+Gradle and JDK 25, executes every test case in a fresh process, compares complete
+console output, and replaces test/ui-test-results.md with the latest results.
 """
 
 from __future__ import annotations
@@ -26,8 +26,7 @@ if hasattr(sys.stdout, "reconfigure"):
 REPOSITORY = Path(__file__).resolve().parent.parent
 PLAN_PATH = REPOSITORY / "test" / "ui-test-plan.md"
 RESULTS_PATH = REPOSITORY / "test" / "ui-test-results.md"
-SOURCE_DIRECTORY = REPOSITORY / "src" / "main" / "java"
-OUTPUT_DIRECTORY = REPOSITORY / "out"
+OUTPUT_DIRECTORY = REPOSITORY / "build" / "classes" / "java" / "main"
 
 
 @dataclass(frozen=True)
@@ -366,7 +365,7 @@ def main() -> int:
         return 2
 
     try:
-        java, javac, java_version = find_jdk_25(args.jdk)
+        java, _, java_version = find_jdk_25(args.jdk)
     except RuntimeError as error:
         print(error, file=sys.stderr)
         write_results("", "BLOCKED", [])
@@ -375,10 +374,15 @@ def main() -> int:
     print("JDK VERSION")
     print(java_version, end="")
 
-    sources = sorted(str(path) for path in SOURCE_DIRECTORY.rglob("*.java"))
+    gradle_wrapper = REPOSITORY / (
+        "gradlew.bat" if os.name == "nt" else "gradlew"
+    )
+    compile_environment = os.environ.copy()
+    compile_environment["JAVA_HOME"] = str(java.parent.parent)
     compile_result = subprocess.run(
-        [str(javac), "-d", str(OUTPUT_DIRECTORY), *sources],
+        [str(gradle_wrapper), "classes"],
         cwd=REPOSITORY,
+        env=compile_environment,
         text=True,
         capture_output=True,
         encoding="utf-8",
@@ -388,7 +392,7 @@ def main() -> int:
         compile_result.stdout + compile_result.stderr
     )
     print("COMPILE")
-    print(f"$ {javac} -d out <all Java files under src/main/java>")
+    print("$ gradlew classes")
     if compile_output:
         print(compile_output, end="")
     if compile_result.returncode != 0:
