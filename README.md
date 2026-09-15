@@ -26,4 +26,16 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
 
 ## Acknowledgements
 
+## Automated checks
+
+GitHub Actions runs Java 25 unit tests, Checkstyle, fat-JAR packaging and all
+recorded console tests on pushes to master/increment branches and PRs to master.
+Reports are attached to each run as `verification-reports`, including failures.
+The workflow does not deploy or publish a release.
+
+Run the same checks locally with `./gradlew check shadowJar` (Windows:
+`./gradlew.bat check shadowJar`) and `python test/run_ui_tests.py`.
+
+## Acknowledgements
+
 OpenAI Codex was used to assist with building and running the console UI testing workflow and reviewing implementation changes for potential issues.
