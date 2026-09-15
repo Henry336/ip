@@ -413,7 +413,7 @@ def main() -> int:
                 )
 
             process = subprocess.run(
-                [str(java), "-cp", str(OUTPUT_DIRECTORY), "ari.Ari"],
+                [str(java), "-ea", "-cp", str(OUTPUT_DIRECTORY), "ari.Ari"],
                 cwd=test_path,
                 input=case.input_text + "\n",
                 text=True,

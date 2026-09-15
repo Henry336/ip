@@ -42,6 +42,8 @@ public class DeadlineTask extends Task {
      * @return Deadline text.
      */
     public String getDeadline() {
+        assert (this.deadlineDate != null) != (this.deadlineText != null)
+                : "A deadline must have exactly one representation";
         if (this.deadlineDate != null) {
             return this.deadlineDate.format(DISPLAY_DATE_FORMATTER);
         }
@@ -94,6 +96,8 @@ public class DeadlineTask extends Task {
      * @return ISO date or unchanged free-form deadline text.
      */
     private String getStorageDeadline() {
+        assert (this.deadlineDate != null) != (this.deadlineText != null)
+                : "A deadline must have exactly one representation";
         if (this.deadlineDate != null) {
             return this.deadlineDate.toString();
         }
