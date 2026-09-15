@@ -1,6 +1,7 @@
-# Ari project template
+# Ari
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+Ari is a Java 25 desktop task manager built from the SE-EDU iP template.
+See the [user guide](docs/README.md) for commands, saving behavior and recovery.
 
 ## Setting up in Intellij
 
@@ -13,14 +14,9 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    1. If there are any further prompts, accept the defaults.
 1. Configure the project to use **JDK 25** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
    In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/ari/Ari.java` file, right-click it, and choose `Run Ari.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
-   ```
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
-   ```
+1. Run `./gradlew.bat run` on Windows, or `./gradlew run` on macOS/Linux,
+   from the project directory to open the GUI. To use the console interface,
+   run `Ari.main()` from `src/main/java/ari/Ari.java` in IntelliJ instead.
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
 
@@ -32,7 +28,7 @@ use those IDs for subsequent mark, unmark and delete commands.
 
 Sorting an empty or single-item list is safe. `sort descending` is rejected:
 this command takes no arguments. New tasks still append to the list, so run
-`sort` again when needed. Use `bye` or `exit` to save the order before closing.
+`sort` again when needed. Accepted changes are saved immediately; `bye` or `exit` closes Ari.
 Existing saved files remain compatible, and task types, dates and completion
 states are preserved. Ordering is lexicographic after case normalization,
 not language-specific dictionary or natural-number ordering.
