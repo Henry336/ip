@@ -1,6 +1,7 @@
-# Ari project template
+# Ari
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+Ari is a Java 25 desktop task manager built from the SE-EDU iP template.
+See the [user guide](docs/README.md) for commands, saving behavior and recovery.
 
 ## Setting up in Intellij
 
@@ -32,7 +33,7 @@ use those IDs for subsequent mark, unmark and delete commands.
 
 Sorting an empty or single-item list is safe. `sort descending` is rejected:
 this command takes no arguments. New tasks still append to the list, so run
-`sort` again when needed. Use `bye` or `exit` to save the order before closing.
+`sort` again when needed. Accepted changes are saved immediately; `bye` or `exit` closes Ari.
 Existing saved files remain compatible, and task types, dates and completion
 states are preserved. Ordering is lexicographic after case normalization,
 not language-specific dictionary or natural-number ordering.
