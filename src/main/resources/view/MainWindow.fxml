@@ -54,6 +54,7 @@
             </padding>
             <children>
                 <TextField fx:id="userInput"
+                           accessibleText="Task command"
                            HBox.hgrow="ALWAYS"
                            onAction="#handleUserInput"
                            promptText="Try: todo read chapter 4" />

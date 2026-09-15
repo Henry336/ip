@@ -13,6 +13,11 @@
     -fx-background-radius: 14px 14px 14px 3px;
 }
 
+.error-reply {
+    -fx-background-color: #fbe4df;
+    -fx-text-fill: #782a22;
+}
+
 #displayPicture {
     -fx-effect: dropshadow(gaussian, rgba(31, 42, 68, 0.20), 8, 0.2, 0, 2);
 }
