@@ -2,12 +2,14 @@ package ari.task;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  * Represents a task that must be completed by a deadline.
  */
 public class DeadlineTask extends Task {
-    private static final DateTimeFormatter DISPLAY_DATE_FORMATTER = DateTimeFormatter.ofPattern("MMM d yyyy");
+    private static final DateTimeFormatter DISPLAY_DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
 
     private final LocalDate deadlineDate;
     private final String deadlineText;
@@ -34,6 +36,15 @@ public class DeadlineTask extends Task {
         super(description, "D");
         this.deadlineDate = deadlineDate;
         this.deadlineText = null;
+    }
+
+    @Override
+    public DeadlineTask copy() {
+        DeadlineTask copy = this.deadlineDate == null
+                ? new DeadlineTask(this.description, this.deadlineText)
+                : new DeadlineTask(this.description, this.deadlineDate);
+        copy.isDone = this.isDone;
+        return copy;
     }
 
     /**

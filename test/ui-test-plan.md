@@ -26,6 +26,79 @@ Each test case must use the following structure:
 
 ## Recorded test cases
 
+## TC-020 — Reject invalid input and autosave before EOF
+
+### Aim
+
+Verify arity, storage delimiters, invalid dates and separators are rejected without exiting,
+then accept a task and reach EOF without bye. The task must already be saved.
+
+### Preconditions
+
+None. Start with a fresh process and isolated data directory.
+
+### Input
+
+```text
+add
+bye extra
+list extra
+mark 1 extra
+todo a|b
+deadline x /by 2026-02-30
+event x /to evening /from morning
+todo saved before EOF
+```
+
+### Expected output
+
+```text
+   ----   
+  / /\ \ 
+ / /__\ \ 
+/ /    \ \ 
+
+Hola, I'm Ari!
+Need any help?
+
+Here is a list of supported commands:
+
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
+
+All tasks were loaded!
+Sorry, I didn't get that... Could you say something else? ^.^
+Use 'bye' without any arguments.
+Use 'list' without any arguments.
+Enter exactly one task ID, with no extra arguments.
+Task fields cannot contain '|' or line breaks.
+Invalid calendar date: 2026-02-30. Use a real YYYY-MM-DD date.
+Use each event separator once, in the correct order.
+____________________________________________________________
+Gotcha. I've added this task for you:
+ [T][ ] saved before EOF
+You currently have 1 task in the list! Better get working...
+____________________________________________________________
+
+```
+
+### Expected data file
+
+```text
+T | 0 | saved before EOF
+```
+
 ## TC-017 — Sort mixed tasks and save updated IDs
 
 ### Aim
@@ -96,7 +169,7 @@ Good job! I've marked this task as done:
  [T][X] zebra
 ____________________________________________________________
 
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -168,7 +241,7 @@ Here are your tasks sorted alphabetically (IDs updated):
 1. [T][ ] only task
 
 Use 'sort' without any arguments.
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -236,7 +309,7 @@ Here are the tasks on your list:
 2. [E][ ] apple (from: Monday to: Tuesday)
 3. [T][X] zebra
 
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -297,7 +370,7 @@ All tasks were loaded!
 Sorry, I didn't get that... Could you say something else? ^.^
 Here are the tasks on your list:
 You currently have no tasks remaining. Good job!
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -356,7 +429,7 @@ ____________________________________________________________
 Here are the tasks on your list:
 1. [D][ ] return book (by: Dec 2 2019)
 
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -453,7 +526,7 @@ No matching tasks found.
 ____________________________________________________________
 
 Oh no! You can't have an empty description for finding tasks
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -523,7 +596,7 @@ Here are the tasks on your list:
 2. [D][ ] submit report (by: Aug 31 2026)
 3. [E][X] project meeting (from: Monday 2pm to: Monday 4pm)
 
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -587,16 +660,17 @@ exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
 Sorry, I couldn't load your tasks: Invalid saved task status: 2
-Here are the tasks on your list:
-You currently have no tasks remaining. Good job!
-I've saved your tasks.
+Storage is protected: tasks were not loaded. Repair the data file and restart Ari.
+Storage is protected: tasks were not loaded. Repair the data file and restart Ari.
+The original data file was left unchanged.
 Bye Bye. See you again!
 ```
 
 ### Expected data file
 
 ```text
-
+T | 0 | should not load
+D | 2 | invalid status | Sunday
 ```
 
 ## TC-011 — Preserve a multiword deadline string
@@ -654,7 +728,7 @@ ____________________________________________________________
 Here are the tasks on your list:
 1. [D][ ] do homework (by: no idea :-p)
 
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -713,7 +787,7 @@ ____________________________________________________________
 Here are the tasks on your list:
 1. [E][ ] orientation week (from: 4/10/2019 to: 11/10/2019)
 
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -784,7 +858,7 @@ Gotcha, I've unmarked this task:
  [T][ ] read book
 ____________________________________________________________
 
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -857,7 +931,7 @@ Here are the tasks on your list:
 1. [D][ ] return book (by: Sunday)
 2. [E][ ] project meeting (from: Monday 2pm to: 4pm)
 
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -915,7 +989,7 @@ bye      | bye                                   | Serves the same purpose as 'e
 All tasks were loaded!
 Task 0 does not exist!
 Send 'list' to see which tasks you have left!
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -984,7 +1058,7 @@ Fortunately, there was nothing to delete.
 Good job! Keep this up!
 ____________________________________________________________
 
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -1043,7 +1117,7 @@ Oh no! You can't have an empty description for events
 Oops! You can only enter integer IDs. Try again!
 Task 1 does not exist!
 Send 'list' to see which tasks you have left!
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -1111,7 +1185,7 @@ Send 'list' to see which tasks you have left!
 Here are the tasks on your list:
 1. [T][ ] keep me
 
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -1166,7 +1240,7 @@ Fortunately, there was nothing to delete.
 Good job! Keep this up!
 ____________________________________________________________
 
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -1245,7 +1319,7 @@ Good job! I've marked this task as done:
  [T][X] second
 ____________________________________________________________
 
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```
 
@@ -1304,6 +1378,6 @@ ____________________________________________________________
 Here are the tasks on your list:
 1. [T][ ] spaced task
 
-I've saved your tasks.
+All accepted changes are saved.
 Bye Bye. See you again!
 ```

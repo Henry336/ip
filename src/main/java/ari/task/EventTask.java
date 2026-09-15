@@ -22,6 +22,13 @@ public class EventTask extends Task {
         this.to = Parser.parseDateTime(to);
     }
 
+    @Override
+    public EventTask copy() {
+        EventTask copy = new EventTask(this.description, this.from, this.to);
+        copy.isDone = this.isDone;
+        return copy;
+    }
+
     /**
      * Returns the start and end times associated with this event.
      *

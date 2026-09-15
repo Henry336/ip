@@ -13,10 +13,14 @@ import ari.ui.Ui;
  * Runs the Ari task manager.
  */
 public class Ari {
+    private static final String PROTECTED_MESSAGE =
+            "Storage is protected: tasks were not loaded. Repair the data file and restart Ari.";
+
     private final Storage storage;
-    private final TaskList tasks;
+    private TaskList tasks;
     private final Ui ui;
     private boolean hasStarted;
+    private boolean isStorageReady;
 
     /**
      * Creates Ari with the components needed to run the task manager.
@@ -24,7 +28,16 @@ public class Ari {
      * @param filePath Path of the task data file.
      */
     public Ari(String filePath) {
-        this.storage = new Storage(filePath);
+        this(new Storage(filePath));
+    }
+
+    /**
+     * Creates Ari with replaceable storage for deterministic persistence tests.
+     *
+     * @param storage Persistence component used for loading and committing changes.
+     */
+    public Ari(Storage storage) {
+        this.storage = storage;
         this.tasks = new TaskList();
         this.ui = new Ui();
         this.hasStarted = false;
@@ -39,26 +52,18 @@ public class Ari {
 
         while (true) {
             String input = this.ui.readCommand();
-            CommandType command = Parser.parseCommandType(input);
-
-            if (command.equals(CommandType.EXIT) || command.equals(CommandType.BYE)) {
-                this.ui.showMessage(getExitResponse(command));
+            if (input == null) {
                 break;
             }
-
-            try {
-                String response = executeCommand(input, command);
-                if (shouldShowDivider(command)) {
-                    this.ui.showMessageWithLines(response);
-                } else {
-                    this.ui.showMessage(response);
-                }
-            } catch (EmptyArgumentException e) {
-                this.ui.showMessage(e.getMessage());
-            } catch (TaskNotFoundException e) {
-                this.ui.showMessage(e.getMessage());
-            } catch (NumberFormatException e) {
-                this.ui.showMessage("Oops! You can only enter integer IDs. Try again!");
+            CommandType command = Parser.parseCommandType(input);
+            CommandResult result = processCommand(input);
+            if (!result.isError() && shouldShowDivider(command)) {
+                this.ui.showMessageWithLines(result.message());
+            } else {
+                this.ui.showMessage(result.message());
+            }
+            if (result.shouldExit()) {
+                break;
             }
         }
 
@@ -72,24 +77,25 @@ public class Ari {
      */
     public String start() {
         if (this.hasStarted) {
-            return "Ari is ready!";
+            return this.isStorageReady ? "Ari is ready!" : PROTECTED_MESSAGE;
         }
         this.hasStarted = true;
 
         try {
             this.storage.start();
         } catch (IOException e) {
-            return "Sorry, I couldn't initialize the storage file: " + e.getMessage();
+            return "Sorry, I couldn't initialize the storage file: " + e.getMessage() + "\n" + PROTECTED_MESSAGE;
         }
 
         try {
             boolean isDataFilePresent = this.storage.loadInto(this.tasks);
+            this.isStorageReady = true;
             if (isDataFilePresent) {
                 return "All tasks were loaded!";
             }
             return "There are no saved tasks yet!";
         } catch (IOException | IllegalArgumentException e) {
-            return "Sorry, I couldn't load your tasks: " + e.getMessage();
+            return "Sorry, I couldn't load your tasks: " + e.getMessage() + "\n" + PROTECTED_MESSAGE;
         }
     }
 
@@ -100,18 +106,61 @@ public class Ari {
      * @return Ari's response to the command.
      */
     public String getResponse(String input) {
-        CommandType command = Parser.parseCommandType(input);
-        if (command.equals(CommandType.EXIT) || command.equals(CommandType.BYE)) {
-            return getExitResponse(command);
-        }
+        return processCommand(input).message().stripTrailing();
+    }
 
-        try {
-            return executeCommand(input, command).stripTrailing();
-        } catch (EmptyArgumentException | TaskNotFoundException e) {
-            return e.getMessage();
-        } catch (NumberFormatException e) {
-            return "Oops! You can only enter integer IDs. Try again!";
+    /** Returns whether startup failed and the session must not change stored data. */
+    public boolean isStorageProtected() {
+        return this.hasStarted && !this.isStorageReady;
+    }
+
+    /**
+     * Validates and processes a command. Mutations become visible only after persistence succeeds.
+     *
+     * @param input Full command entered by the user.
+     * @return Explicit success, error and exit information for either user interface.
+     */
+    public CommandResult processCommand(String input) {
+        if (!this.hasStarted) {
+            start();
         }
+        CommandType command = Parser.parseCommandType(input);
+        try {
+            Parser.validateCommand(input, command);
+            if (command == CommandType.EXIT || command == CommandType.BYE) {
+                String message = this.isStorageReady
+                        ? "All accepted changes are saved."
+                        : "The original data file was left unchanged.";
+                return new CommandResult(message + "\n" + command.getDescription(), false, true);
+            }
+            if (!this.isStorageReady && command != CommandType.UNKNOWN) {
+                return new CommandResult(PROTECTED_MESSAGE, true, false);
+            }
+            if (isMutation(command)) {
+                TaskList stagedTasks = this.tasks.copy();
+                String response = executeCommand(input, command, stagedTasks);
+                this.storage.saveFrom(stagedTasks);
+                this.tasks = stagedTasks;
+                return new CommandResult(response, false, false);
+            }
+            return new CommandResult(executeCommand(input, command, this.tasks), command == CommandType.UNKNOWN, false);
+        } catch (EmptyArgumentException | TaskNotFoundException e) {
+            return new CommandResult(e.getMessage(), true, false);
+        } catch (NumberFormatException e) {
+            return new CommandResult("Oops! You can only enter integer IDs. Try again!", true, false);
+        } catch (IllegalArgumentException e) {
+            return new CommandResult(e.getMessage(), true, false);
+        } catch (IOException e) {
+            return new CommandResult("I couldn't save this change. Nothing was changed. Check the storage location "
+                    + "and try again. Details: " + e.getMessage(), true, false);
+        }
+    }
+
+    /** Returns whether a command must commit a new persisted task list. */
+    private boolean isMutation(CommandType command) {
+        return command == CommandType.TODO || command == CommandType.DEADLINE || command == CommandType.EVENT
+                || command == CommandType.MARK || command == CommandType.UNMARK || command == CommandType.DELETE
+                || command == CommandType.SORT;
     }
 
     /**
@@ -119,30 +168,28 @@ public class Ari {
      *
      * @param input Full command entered by the user.
      * @param command Parsed command type.
+     * @param targetTasks Live list for reads, or an independent staged list for mutations.
      * @return Response describing the command result.
      * @throws EmptyArgumentException If a required command argument is missing.
      * @throws TaskNotFoundException If a requested task does not exist.
      */
-    private String executeCommand(String input, CommandType command)
+    private String executeCommand(String input, CommandType command, TaskList targetTasks)
             throws EmptyArgumentException, TaskNotFoundException {
         switch (command) {
             case SORT:
-                if (input.strip().split("\\s+").length != 1) {
-                    return "Use 'sort' without any arguments.";
-                }
-                this.tasks.sortByDescription();
-                return String.format("%s\n%s", command.getDescription(), this.tasks.toString());
+                targetTasks.sortByDescription();
+                return String.format("%s\n%s", command.getDescription(), targetTasks.toString());
 
             case LIST:
                 return String.format(
                         "%s\n%s",
                         command.getDescription(),
-                        this.tasks.toString()
+                        targetTasks.toString()
                 );
 
             case FIND:
                 String keyword = Parser.parseFindKeyword(input);
-                TaskList matchingTasks = this.tasks.findMatchingTasks(keyword);
+                TaskList matchingTasks = targetTasks.findMatchingTasks(keyword);
                 String matchingTasksText = (matchingTasks.getLength() == 0)
                         ? "No matching tasks found."
                         : matchingTasks.toString().stripTrailing();
@@ -157,8 +204,8 @@ public class Ari {
             case UNMARK:
                 int index = Parser.parseTaskId(input);
                 String changedTask = (command.equals(CommandType.MARK))
-                        ? this.tasks.markTask(index)
-                        : this.tasks.unmarkTask(index);
+                        ? targetTasks.markTask(index)
+                        : targetTasks.unmarkTask(index);
 
                 return String.format(
                         "%s\n %s",
@@ -170,20 +217,20 @@ public class Ari {
             case DEADLINE:
             case EVENT:
                 Task addedTask = Parser.parseTask(input, command);
-                this.tasks.addTask(addedTask);
+                targetTasks.addTask(addedTask);
 
                 return String.format(
                         "%s\n %s\n%s",
                         command.getDescription(),
                         addedTask,
-                        this.tasks.getLengthText()
+                        targetTasks.getLengthText()
                 );
 
             case DELETE:
                 int taskId = Parser.parseTaskId(input);
                 String startingText = command.getDescription();
-                String middleText = this.tasks.deleteTask(taskId);
-                String endingText = this.tasks.getLengthText();
+                String middleText = targetTasks.deleteTask(taskId);
+                String endingText = targetTasks.getLengthText();
 
                 if (middleText.equals("None")) {
                     startingText = "Fortunately, there was nothing to delete.";
@@ -220,30 +267,6 @@ public class Ari {
                 || command.equals(CommandType.DEADLINE)
                 || command.equals(CommandType.EVENT)
                 || command.equals(CommandType.DELETE);
-    }
-
-    /**
-     * Saves all tasks and combines the save result with the exit message.
-     *
-     * @param command Exit command entered by the user.
-     * @return Save result followed by the exit message.
-     */
-    private String getExitResponse(CommandType command) {
-        return String.format("%s\n%s", saveTasks(), command.getDescription());
-    }
-
-    /**
-     * Saves the current tasks and returns the result as a user-facing message.
-     *
-     * @return Message describing whether the tasks were saved.
-     */
-    private String saveTasks() {
-        try {
-            this.storage.saveFrom(this.tasks);
-            return "I've saved your tasks.";
-        } catch (IOException e) {
-            return "Sorry, I couldn't save your tasks: " + e.getMessage();
-        }
     }
 
     /**

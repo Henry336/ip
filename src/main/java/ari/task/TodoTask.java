@@ -12,4 +12,11 @@ public class TodoTask extends Task {
     public TodoTask(String description) {
         super(description, "T");
     }
+
+    @Override
+    public TodoTask copy() {
+        TodoTask copy = new TodoTask(this.description);
+        copy.isDone = this.isDone;
+        return copy;
+    }
 }

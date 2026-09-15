@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class Storage {
      * @param filePath Path of the task data file.
      */
     public Storage(String filePath) {
-        this.filePath = Path.of(filePath);
+        this.filePath = Path.of(filePath).toAbsolutePath();
     }
 
     /**
@@ -79,6 +80,29 @@ public class Storage {
             String line = task.toDataString();
             lines.add(line);
         }
-        Files.write(this.filePath, lines, StandardCharsets.UTF_8);
+        Path temporaryFile = Files.createTempFile(this.filePath.getParent(), "ari-", ".tmp");
+        try {
+            Files.write(temporaryFile, lines, StandardCharsets.UTF_8);
+            replaceFile(temporaryFile);
+        } finally {
+            // Cleanup must not turn an already committed save into a reported failure.
+            try {
+                Files.deleteIfExists(temporaryFile);
+            } catch (IOException e) {
+                temporaryFile.toFile().deleteOnExit();
+            }
+        }
+    }
+
+    /**
+     * Atomically commits the prepared file. Unsupported atomic replacement fails safely.
+     * This seam also allows tests to simulate a failure before replacement.
+     *
+     * @param temporaryFile Complete replacement in the same directory as the data file.
+     * @throws IOException If replacement fails; no truncating fallback is attempted.
+     */
+    protected void replaceFile(Path temporaryFile) throws IOException {
+        Files.move(temporaryFile, this.filePath,
+                StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
     }
 }

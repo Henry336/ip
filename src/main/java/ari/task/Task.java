@@ -21,6 +21,13 @@ public abstract class Task {
     }
 
     /**
+     * Returns an independent task with the same fields and completion state.
+     *
+     * @return Independent copy suitable for a staged change.
+     */
+    public abstract Task copy();
+
+    /**
      * Toggles the completion state of this task.
      */
     public void changeState() {

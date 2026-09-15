@@ -3,6 +3,9 @@ package ari;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ari.exception.EmptyArgumentException;
 import ari.task.DeadlineTask;
@@ -14,7 +17,7 @@ import ari.task.TodoTask;
  * Converts raw user input and saved records into domain values.
  */
 public class Parser {
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MMM d yyyy");
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
 
     /**
      * Identifies the command represented by the user's input.
@@ -29,9 +32,32 @@ public class Parser {
 
         String keyword = input.strip().split("\\s+", 2)[0];
         try {
-            return CommandType.valueOf(keyword.toUpperCase());
+            return CommandType.valueOf(keyword.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
             return CommandType.UNKNOWN;
+        }
+    }
+
+    /**
+     * Enforces fixed command arity and prevents multiline records.
+     *
+     * @param input Raw user input.
+     * @param command Parsed command type.
+     * @throws IllegalArgumentException If command arguments are invalid.
+     */
+    public static void validateCommand(String input, CommandType command) {
+        if (input == null) {
+            return;
+        }
+        if (input.indexOf('\n') >= 0 || input.indexOf('\r') >= 0) {
+            throw new IllegalArgumentException("Enter one command on a single line.");
+        }
+        if (command == CommandType.LIST || command == CommandType.SORT
+                || command == CommandType.BYE || command == CommandType.EXIT) {
+            if (input.strip().split("\\s+").length != 1) {
+                throw new IllegalArgumentException("Use '" + command.name().toLowerCase(Locale.ROOT)
+                        + "' without any arguments.");
+            }
         }
     }
 
@@ -45,6 +71,9 @@ public class Parser {
      */
     public static Task parseTask(String input, CommandType commandType)
             throws EmptyArgumentException {
+        if (input.contains("|") || input.contains("\n") || input.contains("\r")) {
+            throw new IllegalArgumentException("Task fields cannot contain '|' or line breaks.");
+        }
         switch (commandType) {
             case TODO:
                 return new TodoTask(parseTodoDescription(input));
@@ -84,6 +113,9 @@ public class Parser {
         if (commandParts.length < 2) {
             throw new NumberFormatException("Missing task ID");
         }
+        if (commandParts.length != 2) {
+            throw new IllegalArgumentException("Enter exactly one task ID, with no extra arguments.");
+        }
         return Integer.parseInt(commandParts[1]);
     }
 
@@ -95,9 +127,14 @@ public class Parser {
      * @throws IllegalArgumentException If the record is invalid.
      */
     public static Task parseStoredTask(String line) {
-        String[] fields = line.split("\\s*\\|\\s*");
+        String[] fields = line.split("\\s*\\|\\s*", -1);
         if (fields.length < 3) {
             throw new IllegalArgumentException("Invalid saved task: " + line);
+        }
+        for (String field : fields) {
+            if (field.isBlank()) {
+                throw new IllegalArgumentException("Empty field in saved task: " + line);
+            }
         }
 
         String status = fields[1];
@@ -159,6 +196,7 @@ public class Parser {
      */
     private static DeadlineTask parseDeadlineTask(String input)
             throws EmptyArgumentException {
+        validateSeparators(input, "deadline", "/by");
         String[] commandParts = input.strip().split("\\s+/by\\s+", 2);
         if (commandParts.length < 2 || commandParts[1].isBlank()) {
             throw new EmptyArgumentException("deadline");
@@ -168,6 +206,7 @@ public class Parser {
         if (descriptionParts.length < 2 || descriptionParts[1].isBlank()) {
             throw new EmptyArgumentException("deadline");
         }
+        validateIsoDate(commandParts[1].strip());
         return createDeadlineTask(
                 descriptionParts[1].strip(),
                 commandParts[1].strip()
@@ -200,6 +239,7 @@ public class Parser {
      * @throws EmptyArgumentException If the description, start time, or end time is empty.
      */
     private static EventTask parseEventTask(String input) throws EmptyArgumentException {
+        validateSeparators(input, "event", "/from", "/to");
         String[] commandParts = input.strip().split("\\s+/from\\s+", 2);
         if (commandParts.length < 2) {
             throw new EmptyArgumentException("event");
@@ -215,11 +255,45 @@ public class Parser {
             throw new EmptyArgumentException("event");
         }
 
+        LocalDate fromDate = validateIsoDate(timeParts[0].strip());
+        LocalDate toDate = validateIsoDate(timeParts[1].strip());
+        if (fromDate != null && toDate != null && !toDate.isAfter(fromDate)) {
+            throw new IllegalArgumentException("The event end date must be after its start date.");
+        }
+
         return new EventTask(
                 descriptionParts[1].strip(),
                 timeParts[0].strip(),
                 timeParts[1].strip()
         );
+    }
+
+    /** Requires reserved separator tokens exactly once and in their documented order. */
+    private static void validateSeparators(String input, String taskType, String... expected)
+            throws EmptyArgumentException {
+        Matcher matcher = Pattern.compile("(?<!\\S)/(?:by|from|to)(?!\\S)").matcher(input);
+        int index = 0;
+        while (matcher.find()) {
+            if (index >= expected.length || !matcher.group().equals(expected[index])) {
+                throw new IllegalArgumentException("Use each " + taskType + " separator once, in the correct order.");
+            }
+            index++;
+        }
+        if (index != expected.length) {
+            throw new EmptyArgumentException(taskType);
+        }
+    }
+
+    /** Validates ISO-shaped new input without changing legacy stored free-form values. */
+    private static LocalDate validateIsoDate(String text) {
+        if (!text.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")) {
+            return null;
+        }
+        try {
+            return LocalDate.parse(text);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid calendar date: " + text + ". Use a real YYYY-MM-DD date.");
+        }
     }
 
     /**
