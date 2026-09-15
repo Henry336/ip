@@ -126,6 +126,13 @@ public class Ari {
     private String executeCommand(String input, CommandType command)
             throws EmptyArgumentException, TaskNotFoundException {
         switch (command) {
+            case SORT:
+                if (input.strip().split("\\s+").length != 1) {
+                    return "Use 'sort' without any arguments.";
+                }
+                this.tasks.sortByDescription();
+                return String.format("%s\n%s", command.getDescription(), this.tasks.toString());
+
             case LIST:
                 return String.format(
                         "%s\n%s",

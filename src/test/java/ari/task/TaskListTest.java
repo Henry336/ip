@@ -1,6 +1,7 @@
 package ari.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -9,6 +10,38 @@ import org.junit.jupiter.api.Test;
 import ari.exception.TaskNotFoundException;
 
 public class TaskListTest {
+    @Test
+    public void sortByDescription_mixedTypesAndCase_preservesEqualOrderAndState() {
+        TaskList tasks = new TaskList();
+        Task zebra = new TodoTask("zebra");
+        Task apple = new DeadlineTask("Apple", "Sunday");
+        Task equalApple = new EventTask("apple", "Monday", "Tuesday");
+        apple.markTask();
+        tasks.addTask(zebra);
+        tasks.addTask(apple);
+        tasks.addTask(equalApple);
+
+        tasks.sortByDescription();
+        tasks.sortByDescription();
+
+        assertSame(apple, tasks.getTask(0));
+        assertSame(equalApple, tasks.getTask(1));
+        assertSame(zebra, tasks.getTask(2));
+        assertEquals("[D][X] Apple (by: Sunday)", tasks.getTask(0).toString());
+        assertEquals(3, tasks.getLength());
+    }
+
+    @Test
+    public void sortByDescription_emptyAndSingleItem_succeeds() {
+        TaskList tasks = new TaskList();
+        tasks.sortByDescription();
+        assertEquals(0, tasks.getLength());
+        Task onlyTask = new TodoTask("only task");
+        tasks.addTask(onlyTask);
+        tasks.sortByDescription();
+        assertSame(onlyTask, tasks.getTask(0));
+    }
+
     @Test
     public void unmarkAndDelete_invalidIds_preserveList() {
         TaskList tasks = createListWithOneTask();

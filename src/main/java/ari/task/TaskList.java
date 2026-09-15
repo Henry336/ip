@@ -1,6 +1,7 @@
 package ari.task;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,6 +27,14 @@ public class TaskList {
      */
     public void addTask(Task task) {
         this.tasks.add(task);
+    }
+
+    /**
+     * Sorts tasks alphabetically by description, ignoring case.
+     * Equal descriptions retain their relative order; displayed IDs follow the new order.
+     */
+    public void sortByDescription() {
+        this.tasks.sort(Comparator.comparing(task -> task.description.toLowerCase(Locale.ROOT)));
     }
 
     /**

@@ -24,6 +24,19 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
 
+## Sorting tasks
+
+Enter `sort` to sort tasks alphabetically by description, ignoring case.
+Equal descriptions keep their relative order. The response shows the new IDs;
+use those IDs for subsequent mark, unmark and delete commands.
+
+Sorting an empty or single-item list is safe. `sort descending` is rejected:
+this command takes no arguments. New tasks still append to the list, so run
+`sort` again when needed. Use `bye` or `exit` to save the order before closing.
+Existing saved files remain compatible, and task types, dates and completion
+states are preserved. Ordering is lexicographic after case normalization,
+not language-specific dictionary or natural-number ordering.
+
 ## Automated checks
 
 GitHub Actions runs Java 25 unit tests, Checkstyle, fat-JAR packaging and all
