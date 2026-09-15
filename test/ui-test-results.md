@@ -1,16 +1,19 @@
 # Latest Console UI Test Results
 
-- Run at: 2026-09-15T14:50:26+08:00
+- Run at: 2026-09-15T14:56:28+08:00
 - Java: openjdk version "25.0.4" 2026-07-21 LTS
 - Compilation: PASS
-- Test cases run: 16
-- Passed: 16
+- Test cases run: 19
+- Passed: 19
 - Failed: 0
 
 ## Results in execution order
 
 | Test case | Result |
 | --- | --- |
+| TC-017 — Sort mixed tasks and save updated IDs | PASS |
+| TC-018 — Sort empty and single-item lists and reject arguments | PASS |
+| TC-019 — Reload sorted records without changing order | PASS |
 | TC-001 — Unknown command and empty task list | PASS |
 | TC-016 — Parse and save an ISO deadline date | PASS |
 | TC-015 — Find tasks by keyword | PASS |

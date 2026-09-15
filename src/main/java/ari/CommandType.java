@@ -9,6 +9,7 @@ public enum CommandType {
     EXIT("Bye Bye. See you again!"),
     BYE("Bye Bye. See you again!"),
     LIST("Here are the tasks on your list:"),
+    SORT("Here are your tasks sorted alphabetically (IDs updated):"),
     ADD("Added: "),
     TODO("Gotcha. I've added this task for you:"),
     UNKNOWN("Error"),

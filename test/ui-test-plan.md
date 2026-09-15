@@ -26,6 +26,228 @@ Each test case must use the following structure:
 
 ## Recorded test cases
 
+## TC-017 — Sort mixed tasks and save updated IDs
+
+### Aim
+
+Verify case-insensitive stable sorting, repeat sorting, updated IDs, and stored order.
+
+### Preconditions
+
+Start with the saved records below.
+
+### Initial data file
+
+```text
+T | 0 | zebra
+D | 1 | Apple | Sunday
+E | 0 | apple | Monday | Tuesday
+```
+
+### Input
+
+```text
+sort
+sort
+mark 3
+bye
+```
+
+### Expected output
+
+```text
+   ----   
+  / /\ \ 
+ / /__\ \ 
+/ /    \ \ 
+
+Hola, I'm Ari!
+Need any help?
+
+Here is a list of supported commands:
+
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
+
+All tasks were loaded!
+Here are your tasks sorted alphabetically (IDs updated):
+1. [D][X] Apple (by: Sunday)
+2. [E][ ] apple (from: Monday to: Tuesday)
+3. [T][ ] zebra
+
+Here are your tasks sorted alphabetically (IDs updated):
+1. [D][X] Apple (by: Sunday)
+2. [E][ ] apple (from: Monday to: Tuesday)
+3. [T][ ] zebra
+
+____________________________________________________________
+Good job! I've marked this task as done:
+ [T][X] zebra
+____________________________________________________________
+
+I've saved your tasks.
+Bye Bye. See you again!
+```
+
+### Expected data file
+
+```text
+D | 1 | Apple | Sunday
+E | 0 | apple | Monday | Tuesday
+T | 1 | zebra
+```
+
+## TC-018 — Sort empty and single-item lists and reject arguments
+
+### Aim
+
+Verify empty and singleton sorting and a helpful response to unsupported sort arguments.
+
+### Preconditions
+
+None. Start with a fresh program process.
+
+### Input
+
+```text
+sort
+todo only task
+sort
+sort descending
+bye
+```
+
+### Expected output
+
+```text
+   ----   
+  / /\ \ 
+ / /__\ \ 
+/ /    \ \ 
+
+Hola, I'm Ari!
+Need any help?
+
+Here is a list of supported commands:
+
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
+
+All tasks were loaded!
+Here are your tasks sorted alphabetically (IDs updated):
+You currently have no tasks remaining. Good job!
+____________________________________________________________
+Gotcha. I've added this task for you:
+ [T][ ] only task
+You currently have 1 task in the list! Better get working...
+____________________________________________________________
+
+Here are your tasks sorted alphabetically (IDs updated):
+1. [T][ ] only task
+
+Use 'sort' without any arguments.
+I've saved your tasks.
+Bye Bye. See you again!
+```
+
+### Expected data file
+
+```text
+T | 0 | only task
+```
+
+## TC-019 — Reload sorted records without changing order
+
+### Aim
+
+Verify that sorted records load in saved order with task types and completion states intact.
+
+### Preconditions
+
+Start with the saved records below.
+
+### Initial data file
+
+```text
+D | 1 | Apple | Sunday
+E | 0 | apple | Monday | Tuesday
+T | 1 | zebra
+```
+
+### Input
+
+```text
+list
+bye
+```
+
+### Expected output
+
+```text
+   ----   
+  / /\ \ 
+ / /__\ \ 
+/ /    \ \ 
+
+Hola, I'm Ari!
+Need any help?
+
+Here is a list of supported commands:
+
+Keyword  |                 Format                | Description 
+
+todo     | todo <task>                           | Adds a task to your list of tasks! (e.g., todo read book)
+deadline | deadline <task> /by <time>            | Adds a task with a deadline. (e.g., deadline do something /by Sunday)
+event    | event <event> /from <time> /to <time> | Adds an event with 'from' and 'to' times. (e.g., event dinner party /from Monday 2pm /to 9pm)
+find     | find <keyword>                        | Finds tasks containing a keyword. (e.g., find book)
+mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
+unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
+delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
+exit     | exit                                  | Ends the program (e.g., exit)
+bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
+
+All tasks were loaded!
+Here are the tasks on your list:
+1. [D][X] Apple (by: Sunday)
+2. [E][ ] apple (from: Monday to: Tuesday)
+3. [T][X] zebra
+
+I've saved your tasks.
+Bye Bye. See you again!
+```
+
+### Expected data file
+
+```text
+D | 1 | Apple | Sunday
+E | 0 | apple | Monday | Tuesday
+T | 1 | zebra
+```
+
 ## TC-001 — Unknown command and empty task list
 
 ### Aim
@@ -66,7 +288,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -118,7 +341,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -188,7 +412,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -287,7 +512,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -355,7 +581,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -412,7 +639,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -470,7 +698,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -530,7 +759,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -605,7 +835,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -676,7 +907,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -728,7 +960,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -798,7 +1031,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -856,7 +1090,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -919,7 +1154,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -977,7 +1213,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
@@ -1052,7 +1289,8 @@ find     | find <keyword>                        | Finds tasks containing a keyw
 mark     | mark <task ID>                        | Marks the task with the task ID as done! (e.g., mark 1)
 unmark   | unmark <task ID>                      | Does the opposite of mark. (e.g., unmark 1)
 delete   | delete <task ID>                      | Removes the specified task from the list (e.g., delete 1)
-list     | list                                  | Lists all your tasks in the order they were added in! (e.g., list)
+list     | list                                  | Lists all your tasks in their current order. (e.g., list)
+sort     | sort                                  | Sorts tasks alphabetically, ignoring case; updates task IDs.
 exit     | exit                                  | Ends the program (e.g., exit)
 bye      | bye                                   | Serves the same purpose as 'exit' (e.g., bye)
 
