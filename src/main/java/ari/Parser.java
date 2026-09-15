@@ -182,6 +182,8 @@ public class Parser {
      * @return Deadline task containing the appropriate deadline representation.
      */
     private static DeadlineTask createDeadlineTask(String description, String deadlineText) {
+        assert description != null : "Parsed deadline description must not be null";
+        assert deadlineText != null : "Parsed deadline text must not be null";
         try {
             LocalDate deadlineDate = LocalDate.parse(deadlineText);
             return new DeadlineTask(description, deadlineDate);
