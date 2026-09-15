@@ -32,7 +32,7 @@ public class DialogBox extends HBox {
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Unable to load the chat message layout", e);
         }
 
         this.dialog.setText(text);
@@ -60,9 +60,27 @@ public class DialogBox extends HBox {
      * @return Dialog configured for Ari's message.
      */
     public static DialogBox getAriDialog(String text, Image image) {
+        return getAriDialog(text, image, false);
+    }
+
+    /**
+     * Creates an Ari response with an explicit text and color cue for rejected commands.
+     *
+     * @param text Response message.
+     * @param image Ari's image.
+     * @param isError Whether this response describes a rejected command or protected startup.
+     * @return Dialog with an accessible error cue when needed.
+     */
+    public static DialogBox getAriDialog(String text, Image image, boolean isError) {
+        if (isError) {
+            text = "Please check:\n" + text;
+        }
         DialogBox dialogBox = new DialogBox(text, image);
         dialogBox.flip();
         dialogBox.getStyleClass().add("ari-dialog");
+        if (isError) {
+            dialogBox.dialog.getStyleClass().add("error-reply");
+        }
         return dialogBox;
     }
 

@@ -30,7 +30,7 @@ public class Main extends Application {
             stage.setTitle("Ari");
             stage.setMinHeight(480);
             stage.setMinWidth(420);
-            stage.setOnCloseRequest(event -> this.ari.getResponse("bye"));
+            // Accepted mutations are already persisted; closing never overwrites a failed load.
             fxmlLoader.<MainWindow>getController().setAri(this.ari);
             stage.show();
         } catch (IOException e) {

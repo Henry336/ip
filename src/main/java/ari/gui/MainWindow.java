@@ -1,6 +1,9 @@
 package ari.gui;
 
 import ari.Ari;
+import ari.CommandResult;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -37,7 +40,8 @@ public class MainWindow extends AnchorPane {
     @FXML
     public void initialize() {
         this.scrollPane.vvalueProperty().bind(this.dialogContainer.heightProperty());
-        this.sendButton.disableProperty().bind(this.userInput.textProperty().isEmpty());
+        this.sendButton.disableProperty().bind(Bindings.createBooleanBinding(() -> this.userInput.getText().isBlank(),
+                this.userInput.textProperty()));
     }
 
     /**
@@ -52,8 +56,9 @@ public class MainWindow extends AnchorPane {
                 this.ari.start()
         );
         this.dialogContainer.getChildren().add(
-                DialogBox.getAriDialog(welcomeMessage, this.ariImage)
+                DialogBox.getAriDialog(welcomeMessage, this.ariImage, this.ari.isStorageProtected())
         );
+        Platform.runLater(this.userInput::requestFocus);
     }
 
     /**
@@ -66,11 +71,15 @@ public class MainWindow extends AnchorPane {
             return;
         }
 
-        String response = this.ari.getResponse(input);
+        CommandResult result = this.ari.processCommand(input);
         this.dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, this.userImage),
-                DialogBox.getAriDialog(response, this.ariImage)
+                DialogBox.getAriDialog(result.message().stripTrailing(), this.ariImage, result.isError())
         );
         this.userInput.clear();
+        this.userInput.requestFocus();
+        if (result.shouldExit()) {
+            Platform.exit();
+        }
     }
 }
