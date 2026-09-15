@@ -21,6 +21,17 @@ public class TaskList {
     }
 
     /**
+     * Copies the list and every mutable task so staged edits cannot affect this list.
+     *
+     * @return Independent task list preserving order, types and completion states.
+     */
+    public TaskList copy() {
+        TaskList copy = new TaskList();
+        this.tasks.forEach(task -> copy.addTask(task.copy()));
+        return copy;
+    }
+
+    /**
      * Adds the specified task to the task list.
      *
      * @param task Task to add.

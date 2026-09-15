@@ -1,16 +1,17 @@
 # Latest Console UI Test Results
 
-- Run at: 2026-09-15T15:01:49+08:00
+- Run at: 2026-09-15T17:01:12+08:00
 - Java: openjdk version "25.0.4" 2026-07-21 LTS
 - Compilation: PASS
-- Test cases run: 19
-- Passed: 19
+- Test cases run: 20
+- Passed: 20
 - Failed: 0
 
 ## Results in execution order
 
 | Test case | Result |
 | --- | --- |
+| TC-020 — Reject invalid input and autosave before EOF | PASS |
 | TC-017 — Sort mixed tasks and save updated IDs | PASS |
 | TC-018 — Sort empty and single-item lists and reject arguments | PASS |
 | TC-019 — Reload sorted records without changing order | PASS |

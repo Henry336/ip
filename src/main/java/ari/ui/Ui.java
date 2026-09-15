@@ -63,10 +63,10 @@ public class Ui {
     /**
      * Reads the next command entered by the user.
      *
-     * @return Full command entered by the user.
+     * @return Full command entered by the user, or null at end of input.
      */
     public String readCommand() {
-        return this.scanner.nextLine();
+        return this.scanner.hasNextLine() ? this.scanner.nextLine() : null;
     }
 
     /**
