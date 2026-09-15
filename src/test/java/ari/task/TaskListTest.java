@@ -1,6 +1,7 @@
 package ari.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,23 @@ import org.junit.jupiter.api.Test;
 import ari.exception.TaskNotFoundException;
 
 public class TaskListTest {
+    @Test
+    public void unmarkAndDelete_invalidIds_preserveList() {
+        TaskList tasks = createListWithOneTask();
+        int[] invalidIds = {Integer.MIN_VALUE, -1, 0, 2, Integer.MAX_VALUE};
+        for (int taskId : invalidIds) {
+            assertThrows(TaskNotFoundException.class, () -> tasks.unmarkTask(taskId));
+            assertThrows(TaskNotFoundException.class, () -> tasks.deleteTask(taskId));
+        }
+        assertEquals(1, tasks.getLength());
+        assertEquals("[T][ ] only task", tasks.getTask(0).toString());
+    }
+
+    @Test
+    public void deleteTask_emptyList_preservesExistingResponse() throws TaskNotFoundException {
+        assertEquals("None", new TaskList().deleteTask(1));
+    }
+
     @Test
     public void markTask_validSecondId_marksSecondTaskOnly() throws TaskNotFoundException {
         TaskList tasks = new TaskList();

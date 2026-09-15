@@ -36,11 +36,7 @@ public class TaskList {
      * @throws TaskNotFoundException If the task ID is not in the list.
      */
     public String markTask(int taskId) throws TaskNotFoundException {
-        if (taskId <= 0 || taskId - 1 >= this.tasks.size()) {
-            throw new TaskNotFoundException(taskId);
-        }
-
-        Task task = this.tasks.get(taskId - 1);
+        Task task = getTaskById(taskId);
         task.markTask();
         return task.toString();
     }
@@ -53,11 +49,7 @@ public class TaskList {
      * @throws TaskNotFoundException If the task ID is not in the list.
      */
     public String unmarkTask(int taskId) throws TaskNotFoundException {
-        if (taskId <= 0 || taskId - 1 >= this.tasks.size()) {
-            throw new TaskNotFoundException(taskId);
-        }
-
-        Task task = this.tasks.get(taskId - 1);
+        Task task = getTaskById(taskId);
         task.unmarkTask();
         return task.toString();
     }
@@ -73,14 +65,24 @@ public class TaskList {
         if (this.tasks.isEmpty()) {
             return "None";
         }
-        if (taskId <= 0 || taskId - 1 >= this.tasks.size()) {
-            throw new TaskNotFoundException(taskId);
-        }
-
-        Task deletedTask = this.tasks.get(taskId - 1);
+        Task deletedTask = getTaskById(taskId);
         this.tasks.remove(taskId - 1);
 
         return deletedTask.toString();
+    }
+
+    /**
+     * Validates a user-facing ID and returns its task.
+     *
+     * @param taskId One-based ID supplied by the user.
+     * @return Task corresponding to the ID.
+     * @throws TaskNotFoundException If the ID is outside the current list.
+     */
+    private Task getTaskById(int taskId) throws TaskNotFoundException {
+        if (taskId <= 0 || taskId > this.tasks.size()) {
+            throw new TaskNotFoundException(taskId);
+        }
+        return this.tasks.get(taskId - 1);
     }
 
     /**
