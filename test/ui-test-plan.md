@@ -6,7 +6,8 @@
 - Required Java version: JDK 25
 - Test command: `python test/run_ui_tests.py`
 - Compile command: `gradlew classes`
-- Run command: `java -cp build/classes/java/main ari.Ari`
+- Run command: `java -ea -cp build/classes/java/main ari.Ari`
+- Assertions: enabled to check internal assumptions during all recorded cases
 - Session isolation: start a fresh process with an independent `data/ari.txt`
 - Comparison: normalize CRLF/LF line endings, then compare complete output and any expected data file exactly
 - Failure policy: record each failure and continue running all remaining independent cases
