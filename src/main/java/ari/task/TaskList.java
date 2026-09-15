@@ -95,12 +95,9 @@ public class TaskList {
         TaskList matchingTasks = new TaskList();
         String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
 
-        for (Task task : this.tasks) {
-            String normalizedDescription = task.description.toLowerCase(Locale.ROOT);
-            if (normalizedDescription.contains(normalizedKeyword)) {
-                matchingTasks.addTask(task);
-            }
-        }
+        this.tasks.stream()
+                .filter(task -> task.description.toLowerCase(Locale.ROOT).contains(normalizedKeyword))
+                .forEachOrdered(matchingTasks::addTask);
 
         return matchingTasks;
     }
