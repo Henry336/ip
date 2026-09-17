@@ -1,5 +1,36 @@
 # Week 6 GUI smoke evidence
 
+## Latest run: 18 September 2026 (visual identity refresh)
+
+Re-run after replacing the two placeholder avatar images with original
+line-art artwork and retuning the stylesheet palette to match them. Windows,
+Microsoft OpenJDK 25.0.4, JavaFX 17.0.7, against a clean
+`gradlew.bat clean check shadowJar` build and a new temporary directory.
+
+| Check | Result |
+|---|---|
+| Whitespace-only Send disabled | PASS |
+| TextField action submits valid tasks and list | PASS |
+| Invalid `bye extra` does not close | PASS |
+| Error uses explicit `Please check:` text and contrasting color | PASS |
+| Input focus restored after submission | PASS |
+| Minimum layout, input visible and error readable | PASS |
+| Wide layout, long text wraps | PASS |
+| Accepted tasks present in temporary data file before exit | PASS |
+| Valid bye ends the process without harness-forced exit | PASS |
+
+Harness reported `PASS: blank input, submission, error cue, focus, layouts,
+saved data; bye requested`, exit code 0. Snapshots regenerated and visually
+inspected; `Ui.png` was copied to `docs/Ui.png` as the user guide screenshot.
+
+Only presentation changed. No command syntax, response text, parsing or
+persistence behavior was modified, so `test/ui-test-plan.md` needed no update
+and all 20 recorded console cases passed unchanged. The error cue still
+carries both the `Please check:` text and a contrasting background, so the
+cue does not depend on color alone.
+
+## Earlier run: 15 September 2026
+
 15 September 2026, Windows, Microsoft OpenJDK 25.0.4, JavaFX 17.0.7.
 Harness: `test/GuiSmoke.java`, using classes/resources from `build/libs/ari.jar`
 and a new temporary working directory, never personal task data.
