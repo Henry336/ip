@@ -8,15 +8,17 @@ press Enter or click **Send**.
 ## Quick start
 
 1. Install Java **25**; check that `java -version` reports version 25.
-2. Download the single `ari.jar` asset from the release you intend to use on
-   [the releases page](https://github.com/Henry336/ip/releases).
+2. Download the `ari.jar` asset from the
+   [latest release](https://github.com/Henry336/ip/releases/latest).
 3. Put it in a writable folder. Open a terminal there and run `java -jar ari.jar`.
+   Launch it from the terminal rather than double-clicking, so any startup error
+   is visible.
 4. Try `todo read the user guide`, then `list`.
 
-This guide describes the Week 6 implementation. Until that release is published,
-older releases may behave differently. Developers can build this version with
-`./gradlew clean shadowJar` (Windows: `gradlew.bat clean shadowJar`) using Java 25.
-The artifact is `build/libs/ari.jar`.
+This guide describes **v0.2**, the current release. Earlier releases behave
+differently, most notably in when changes are saved. Developers can build the
+same artifact with `./gradlew clean shadowJar` (Windows:
+`gradlew.bat clean shadowJar`) using Java 25; the output is `build/libs/ari.jar`.
 
 ## Commands
 
