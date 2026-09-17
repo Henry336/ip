@@ -1,9 +1,12 @@
 # Week 6 GUI smoke evidence
 
-## Latest run: 18 September 2026 (visual identity refresh)
+## Latest run: 18 September 2026 (avatar redraw)
 
-Re-run after replacing the two placeholder avatar images with original
-line-art artwork and retuning the stylesheet palette to match them. Windows,
+Re-run after redrawing both avatars. The first replacement artwork was rejected
+on review: its looping body placed a small accent circle low on the figure,
+which read awkwardly at the 58px chat size. Both avatars were redrawn as a
+simpler closed loop with dot eyes and a single tail curl, mirrored between the
+two so the pair faces each other, keeping the same light palette. Windows,
 Microsoft OpenJDK 25.0.4, JavaFX 17.0.7, against a clean
 `gradlew.bat clean check shadowJar` build and a new temporary directory.
 
