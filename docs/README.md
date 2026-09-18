@@ -15,7 +15,7 @@ press Enter or click **Send**.
    is visible.
 4. Try `todo read the user guide`, then `list`.
 
-This guide describes **v0.2**, the current release. Earlier releases behave
+This guide describes **v0.3**, the current release. Releases before v0.2 behave
 differently, most notably in when changes are saved. Developers can build the
 same artifact with `./gradlew clean shadowJar` (Windows:
 `gradlew.bat clean shadowJar`) using Java 25; the output is `build/libs/ari.jar`.
